@@ -1,10 +1,9 @@
 plugins {
     kotlin("jvm") version "1.8.20"
-    application
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "org.jetbrains.academy.test.system"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -16,7 +15,7 @@ dependencies {
     implementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
-    testRuntimeOnly("org.junit.platform:junit-platform-console:1.9.0")
+    testRuntimeOnly("org.junit.platform:junit-platform-console:1.9.2")
 }
 
 tasks.test {
@@ -25,8 +24,4 @@ tasks.test {
 
 kotlin {
     jvmToolchain(8)
-}
-
-application {
-    mainClass.set("MainKt")
 }
