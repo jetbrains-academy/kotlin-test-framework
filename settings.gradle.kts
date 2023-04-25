@@ -5,5 +5,5 @@ pluginManagement {
     }
     
 }
-rootProject.name = "kotlinTestSystem"
+rootProject.name = "kotlin-test-system"
 
