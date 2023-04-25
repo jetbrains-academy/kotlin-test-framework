@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenComment")
+
 package org.jetbrains.academy.test.system.models.variable
 
 import org.jetbrains.academy.test.system.checkType

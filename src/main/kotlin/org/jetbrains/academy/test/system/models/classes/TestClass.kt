@@ -169,6 +169,7 @@ data class TestClass(
 
 fun TestClass.findClass(): Class<*> = Class.forName(this.getFullName())
 
+@Suppress("SwallowedException")
 fun TestClass.findClassSafe() = try {
     this.findClass()
 } catch (e: ClassNotFoundException) {

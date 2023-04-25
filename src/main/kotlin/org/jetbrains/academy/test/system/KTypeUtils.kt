@@ -34,7 +34,6 @@ private fun KType.checkNullability(kotlinType: TestKotlinType, errorMessagePrefi
 }
 
 private fun KType.checkAbbreviation(abbreviation: String, errorMessagePrefix: String) {
-    val abr = this.getAbbreviation()
     assert(this.getAbbreviation() == abbreviation) { "The return type for $errorMessagePrefix must contain $abbreviation" }
 }
 
@@ -59,12 +58,4 @@ private fun KType.getAbbreviation(): String {
     } else {
         abr
     }
-}
-
-fun method(str: String?): String? {
-    var str = str
-    if (str != null && str.length > 0 && str[str.length - 1] == 'x') {
-        str = str.substring(0, str.length - 1)
-    }
-    return str
 }
