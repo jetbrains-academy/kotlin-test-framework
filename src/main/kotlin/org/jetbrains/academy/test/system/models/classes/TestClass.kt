@@ -108,7 +108,6 @@ data class TestClass(
     fun checkConstructors(clazz: Class<*>, constructorGetters: List<ConstructorGetter>): Constructor<out Any> {
         require(constructorGetters.isNotEmpty())
         val arguments = constructorGetters.map { it.parameterTypes }.toSet()
-        require(arguments.size == 1)
         val constructors = mutableListOf<Constructor<*>>()
         constructorGetters.forEach {
             it.getConstructorWithDefaultArguments(clazz)?.let { constructor ->

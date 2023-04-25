@@ -12,7 +12,11 @@ repositories {
 
 dependencies {
     implementation(kotlin("reflect"))
-    testImplementation(kotlin("test"))
+    val junitJupiterVersion = "5.9.0"
+    implementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-console:1.9.0")
 }
 
 tasks.test {

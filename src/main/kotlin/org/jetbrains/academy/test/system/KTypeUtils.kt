@@ -35,25 +35,23 @@ private fun KType.checkNullability(kotlinType: TestKotlinType, errorMessagePrefi
 
 private fun KType.checkAbbreviation(abbreviation: String, errorMessagePrefix: String) {
     val abr = this.getAbbreviation()
-    // TODO: can we do it better?
-    if (abr == null && this.toString() == abbreviation) {
-        return
-    }
-    assert(abr != null) { "You need to create a value class or a type alias $abbreviation and use it as the return type for $errorMessagePrefix" }
-    assert(abr!! == abbreviation) { "The return type for $errorMessagePrefix must contain $abbreviation" }
+    assert(this.getAbbreviation() == abbreviation) { "The return type for $errorMessagePrefix must contain $abbreviation" }
 }
 
-private fun KType.getAbbreviation(): String? {
+private fun KType.getAbbreviation(): String {
     val separator = " /*"
     val strRepresentation = this.toString()
     if (separator !in strRepresentation) {
-        // Because we call it only if the abbreviation was defined into the expected type
         if (arguments.isNotEmpty()) {
             this.arguments.first().type?.toString()?.let {
                 return it
             }
         }
-        return null
+        return if ("?" in strRepresentation) {
+            strRepresentation.dropLast(1)
+        } else {
+            strRepresentation
+        }
     }
     val abr = strRepresentation.split(separator).first()
     return if ("<" in strRepresentation) {
@@ -61,4 +59,12 @@ private fun KType.getAbbreviation(): String? {
     } else {
         abr
     }
+}
+
+fun method(str: String?): String? {
+    var str = str
+    if (str != null && str.length > 0 && str[str.length - 1] == 'x') {
+        str = str.substring(0, str.length - 1)
+    }
+    return str
 }
