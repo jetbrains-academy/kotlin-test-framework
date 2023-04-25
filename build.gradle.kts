@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.8.20"
+    id("io.gitlab.arturbosch.detekt") version "1.21.0"
 }
 
 group = "org.jetbrains.academy.test.system"
@@ -23,5 +24,23 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(11)
+}
+
+apply<io.gitlab.arturbosch.detekt.DetektPlugin>()
+
+configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
+    config = rootProject.files("detekt.yml")
+    buildUponDefaultConfig = true
+    debug = true
+}
+
+val detektReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
+    output.set(rootProject.buildDir.resolve("reports/detekt/merge.sarif"))
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
+    finalizedBy(detektReportMerge)
+    reports.sarif.required.set(true)
+    detektReportMerge.get().input.from(sarifReportFile)
 }

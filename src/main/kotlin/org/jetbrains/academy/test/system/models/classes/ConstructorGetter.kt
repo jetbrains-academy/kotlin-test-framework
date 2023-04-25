@@ -17,7 +17,7 @@ data class ConstructorGetter(
     val defaultParameterTypes: List<Class<*>> = emptyList(),
     val toAddDefaultConstructorMarker: Boolean = false
 ) {
-    @Suppress("SpreadOperator")
+    @Suppress("SpreadOperator", "SwallowedException")
     fun getConstructorWithDefaultArguments(clazz: Class<*>) = try {
         val parameters =
             (parameterTypes + defaultParameterTypes.map { listOf(it, Int::class.java) }.flatten()).toMutableList()

@@ -7,6 +7,7 @@ import org.jetbrains.academy.test.system.models.variable.TestVariable
 import org.jetbrains.academy.test.system.models.variable.VariableMutability
 import org.jetbrains.academy.test.system.testData.sam.MySamInterface
 
+@Suppress("UtilityClassWithPublicConstructor")
 class MyClass {
     companion object {
         private val samParent = MySamInterface {

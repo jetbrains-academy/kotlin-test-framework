@@ -1,3 +1,5 @@
+@file:Suppress("FunctionOnlyReturningConstant")
+
 package org.jetbrains.academy.test.system.testData.dataClass
 
 import org.jetbrains.academy.test.system.models.TestKotlinType
