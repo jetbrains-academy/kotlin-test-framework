@@ -34,6 +34,7 @@ data class TestVariable(
     val isInPrimaryConstructor: Boolean = false,
     val isStatic: Boolean = false,
     val isConst: Boolean = false,
+    // TODO: add nullability?
 ) {
     private fun getTypePrettyString() = kotlinType?.getTypePrettyString() ?: javaType
 

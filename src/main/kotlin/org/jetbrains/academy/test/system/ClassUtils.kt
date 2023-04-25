@@ -1,5 +1,6 @@
 package org.jetbrains.academy.test.system
 
+import org.jetbrains.academy.test.system.models.Visibility
 import org.jetbrains.academy.test.system.models.classes.ClassType
 import org.jetbrains.academy.test.system.models.classes.TestClass
 import java.lang.reflect.Modifier
@@ -50,15 +51,19 @@ fun Class<*>.checkIfIsDataClass(testClass: TestClass) {
     dataClassMethods.forEach { dataClassMethod ->
         assert(dataClassMethod in methodsNames || methodsNames.any{ dataClassMethod in it }) { "${testClass.getFullName()} must be a data class" }
     }
-    val (primary, _) = testClass.declaredFields.partition { it.isInPrimaryConstructor }
+    val componentN = testClass.declaredFields.filter { it.isInPrimaryConstructor && it.visibility == Visibility.PUBLIC }
     val componentNFunctions = methodsNames.filter { "component" in it }
     val componentNErrorMessage =
-        "You must put only ${primary.size} fields into the primary constructor: ${primary.joinToString(", ") { it.name }}."
-    assert(componentNFunctions.size == primary.size) { componentNErrorMessage }
-    primary.forEachIndexed { index, _ ->
+        "You must put only ${componentN.size} public fields into the primary constructor: ${componentN.joinToString(", ") { it.name }}."
+    assert(componentNFunctions.size == componentN.size) { componentNErrorMessage }
+    componentN.forEachIndexed { index, _ ->
         val name = "component${index + 1}"
         assert(name in methodsNames || methodsNames.any { name in it }) { componentNErrorMessage }
     }
+    val primary = testClass.declaredFields.filter { it.isInPrimaryConstructor }
+    val constructorErrorMessage = "You must put only ${primary.size} fields into the primary constructor: ${primary.joinToString(", ") { it.name }}."
+    val constructor = this.constructors.first() ?: error("The data class must have at least one constructor!")
+    assert(primary.size == constructor.parameterTypes.size) { constructorErrorMessage }
 }
 
 private fun Class<*>.hasSameVisibilityWith(testClass: TestClass) = this.getVisibility() == testClass.visibility
