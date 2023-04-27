@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.jetbrains.academy.test.system"
-version = "1.0.2"
+version = "1.0.3"
 
 repositories {
     mavenCentral()
