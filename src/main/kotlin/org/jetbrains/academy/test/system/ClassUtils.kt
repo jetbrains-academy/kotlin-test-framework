@@ -62,8 +62,8 @@ fun Class<*>.checkIfIsDataClass(testClass: TestClass) {
     }
     val primary = testClass.declaredFields.filter { it.isInPrimaryConstructor }
     val constructorErrorMessage = "You must put only ${primary.size} fields into the primary constructor: ${primary.joinToString(", ") { it.name }}."
-    val constructor = this.constructors.first() ?: error("The data class must have at least one constructor!")
-    assert(primary.size == constructor.parameterTypes.size) { constructorErrorMessage }
+    require(this.constructors.isNotEmpty()) { "The data class must have at least one constructor!" }
+    assert(this.constructors.any { it.parameterTypes.size == primary.size }) { constructorErrorMessage }
 }
 
 private fun Class<*>.hasSameVisibilityWith(testClass: TestClass) = this.getVisibility() == testClass.visibility
