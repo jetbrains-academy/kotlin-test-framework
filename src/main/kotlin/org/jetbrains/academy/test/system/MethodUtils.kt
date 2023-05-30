@@ -33,7 +33,7 @@ private fun List<Method>.filterByCondition(errorMessage: String, condition: (Met
 @Suppress("MaxLineLength")
 fun Array<Method>.findMethod(method: TestMethod, customErrorMessage: String? = null): Method {
     val filteredByName =
-        this.toList().filterByCondition(customErrorMessage ?: "The method ${method.prettyString()} is missed") {
+        this.toList().filterByCondition(customErrorMessage ?: "The method ${method.prettyString()} is missed. Check it's name and access modifier properly.") {
             if (method.hasGeneratedPartInName) {
                 method.name in it.name
             } else {
@@ -47,7 +47,7 @@ fun Array<Method>.findMethod(method: TestMethod, customErrorMessage: String? = n
         }
     val filteredByArgumentsCount =
         filteredByType.filterByCondition(customErrorMessage ?: "The method ${method.name} should have ${method.arguments.size} arguments") { it.parameterCount == method.arguments.size }
-    require(filteredByArgumentsCount.size == 1) { customErrorMessage ?: "The method ${method.prettyString()} is missed" }
+    require(filteredByArgumentsCount.size == 1) { customErrorMessage ?: "The method ${method.prettyString()} is missed. Check it's arguments properly." }
     val m = filteredByArgumentsCount.first()
     val params = m.parameterTypes.map { it.name.getShortName().lowercase() }
     val args = method.arguments.map { it.javaType.lowercase() }
