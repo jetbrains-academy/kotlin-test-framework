@@ -33,7 +33,7 @@ fun Class<*>.isSamInterface(): Boolean {
     if (methods.size != 1) {
         return false
     }
-    return Modifier.isAbstract(methods.first().modifiers)
+    return this.kotlin.isFun
 }
 
 fun Class<*>.getInstanceFiled() = this.fields.find { it.name == "INSTANCE" }
