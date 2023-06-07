@@ -48,12 +48,12 @@ data class TestVariable(
         return "$prefix$name: ${getTypePrettyString()}"
     }
 
-    fun checkField(field: Field) {
+    fun checkField(field: Field, toCheckMutability: Boolean) {
         val commonProp =
             field.kotlinProperty?.let { FieldProperties.buildByKotlinProp(it) } ?: FieldProperties.buildByJavaField(
                 field
             )
-        commonProp.checkProperties(this)
+        commonProp.checkProperties(this, toCheckMutability)
         if (isStatic) {
             assert(Modifier.isStatic(field.modifiers)) { "The field $name must be defined into an object or a companion object." }
         }
