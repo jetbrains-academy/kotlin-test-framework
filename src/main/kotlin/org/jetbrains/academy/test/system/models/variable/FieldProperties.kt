@@ -4,6 +4,7 @@ import org.jetbrains.academy.test.system.getShortName
 import org.jetbrains.academy.test.system.models.Visibility
 import org.jetbrains.academy.test.system.models.getVisibility
 import java.lang.reflect.Field
+import java.lang.reflect.Modifier
 import kotlin.reflect.KProperty
 import kotlin.reflect.jvm.javaType
 
@@ -29,10 +30,16 @@ internal data class FieldProperties(
             kotlinProp.returnType.javaType.getShortName(),
         )
 
+        private fun Field.getMutabilityByJavaField() = if (Modifier.isFinal(this.modifiers)) {
+            VariableMutability.VAL
+        } else {
+            VariableMutability.VAR
+        }
+
         fun buildByJavaField(field: Field) = FieldProperties(
             field.name,
             field.getVisibility()?.name,
-            VariableMutability.JAVA_MUTABILITY,
+            field.getMutabilityByJavaField(),
             field.type.getShortName(),
         )
     }
