@@ -47,6 +47,6 @@ internal data class FieldProperties(
             "The field ${variable.name} must be ${it.key}"
         } ?: "The filed ${variable.name} should not have val or var key words"
         assert(mutability.compareWith(variable.mutability)) { mutabilityErrorMessage }
-        assert(javaType == variable.javaType.lowercase()) { "The return type of the field ${variable.name} must be $javaType" }
+        assert(javaType == variable.javaType.lowercase()) { "The return type of the field ${variable.name} must be ${variable.javaType.lowercase()}" }
     }
 }
