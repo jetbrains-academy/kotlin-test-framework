@@ -17,7 +17,7 @@ fun KType.checkType(
         }
     }
     if (toCheckJavaType) {
-        val message = "The return type of $errorMessagePrefix must be $javaType"
+        val message = "The return type of $errorMessagePrefix must be ${this.javaType.getShortName()}"
         // We have a parametrized type
         if ("<" in this.javaType.toString() && kotlinType?.abbreviation == null) {
             val type = kotlinType?.getTypePrettyString() ?: javaType
