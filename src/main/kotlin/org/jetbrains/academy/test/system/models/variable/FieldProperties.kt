@@ -44,16 +44,18 @@ internal data class FieldProperties(
         )
     }
 
-    fun checkProperties(variable: TestVariable) {
+    fun checkProperties(variable: TestVariable, toCheckMutability: Boolean) {
         assert(name == variable.name) { "The field name must be: ${variable.name}" }
         val visibilityErrorMessage = variable.visibility?.let {
             "The visibility of the field ${variable.name} must be ${it.key}"
         } ?: "The filed ${variable.name} should not have any modifiers"
         assert(visibilityKey?.lowercase() == variable.visibility?.key) { visibilityErrorMessage }
-        val mutabilityErrorMessage = variable.mutability?.let {
-            "The field ${variable.name} must be ${it.key}"
-        } ?: "The filed ${variable.name} should not have val or var key words"
-        assert(mutability.compareWith(variable.mutability)) { mutabilityErrorMessage }
+        if (toCheckMutability) {
+            val mutabilityErrorMessage = variable.mutability?.let {
+                "The field ${variable.name} must be ${it.key}"
+            } ?: "The filed ${variable.name} should not have val or var key words"
+            assert(mutability.compareWith(variable.mutability)) { mutabilityErrorMessage }
+        }
         assert(javaType == variable.javaType.lowercase()) { "The return type of the field ${variable.name} must be ${variable.javaType.lowercase()}" }
     }
 }

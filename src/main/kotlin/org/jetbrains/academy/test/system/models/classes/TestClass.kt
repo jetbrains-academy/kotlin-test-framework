@@ -71,16 +71,16 @@ data class TestClass(
 
     private fun checkFields(clazz: Class<*>) = checkVariables(clazz, this.declaredFields)
 
-    private fun checkVariables(clazz: Class<*>, variables: List<TestVariable>) {
+    private fun checkVariables(clazz: Class<*>, variables: List<TestVariable>, toCheckMutability: Boolean = true) {
         val declaredFields = clazz.getDeclaredFieldsWithoutCompanion()
         variables.forEach { field ->
             val currentField = declaredFields.find { it.name == field.name }
             assert(currentField != null) { "Can not find the field with name ${field.name}" }
-            field.checkField(currentField!!)
+            field.checkField(currentField!!, toCheckMutability)
         }
     }
 
-    fun checkEnumEntryDefinition(clazz: Class<*>) = checkVariables(clazz, this.declaredEnumEntries)
+    fun checkEnumEntryDefinition(clazz: Class<*>) = checkVariables(clazz, this.declaredEnumEntries, false)
 
     fun checkFieldsDefinition(clazz: Class<*>, toCheckDeclaredFieldsSize: Boolean = true) {
         if (toCheckDeclaredFieldsSize) {
