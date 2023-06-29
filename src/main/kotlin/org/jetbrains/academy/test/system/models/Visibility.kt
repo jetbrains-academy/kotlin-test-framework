@@ -14,6 +14,7 @@ enum class Visibility(val key: String) {
 }
 
 
+@Suppress("SwallowedException")
 fun KVisibility.asVisibility() = try {
     Visibility.valueOf(name)
 } catch (e: IllegalArgumentException) {
