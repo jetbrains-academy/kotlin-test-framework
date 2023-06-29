@@ -11,7 +11,7 @@ package org.jetbrains.academy.test.system.models
  * ```
  * The [TestKotlinType] is
  * ```
- * KotlinType("Int", "jetbrains.kotlin.course.alias.util.Identifier")
+ * KotlinType("Int", "org.jetbrains.academy.test.system.models.variable.Identifier")
  * ```
  *
  * 2) For a list of numbers `List<Int>` the [TestKotlinType] is
@@ -19,15 +19,15 @@ package org.jetbrains.academy.test.system.models
  * KotlinType("List", params = listOf("kotlin.Int"))
  * ```
  *
- * It also works with custom user's types as parameters:
+ * 3) It also works with custom user's types as parameters:
  * ```
  * package org.jetbrains.academy.test.system.models.variable
  *
- * data class MyClass(val a)
+ * data class MyClass(val a: Int)
  * ```
  * The [TestKotlinType] for a list of `MyClass` is
  * ```
- * KotlinType("Int", "org.jetbrains.academy.test.system.models.variable.MyClass")
+ * KotlinType("List", params = listOf("org.jetbrains.academy.test.system.models.variable.MyClass"))
  * ```
  *
  * @param type is a short type's name.
