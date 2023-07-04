@@ -5,7 +5,6 @@ package org.jetbrains.academy.test.system.testData.dataClass
 import org.jetbrains.academy.test.system.models.TestKotlinType
 import org.jetbrains.academy.test.system.models.Visibility
 import org.jetbrains.academy.test.system.models.classes.TestClass
-import org.jetbrains.academy.test.system.models.method.TestMethod
 import org.jetbrains.academy.test.system.models.variable.TestVariable
 import org.jetbrains.academy.test.system.models.variable.VariableMutability
 
