@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenComment")
+
 package org.jetbrains.academy.test.system.ij.formatting
 
 import com.intellij.openapi.application.ApplicationManager
