@@ -4,7 +4,6 @@ plugins {
     kotlin("jvm") version "1.8.20"
     id("io.gitlab.arturbosch.detekt") version "1.21.0"
     `maven-publish`
-    id("tanvd.kosogor") version "1.0.13"
 }
 
 group = "org.jetbrains.academy.test.system"
@@ -14,24 +13,10 @@ allprojects {
     apply {
         plugin("kotlin")
         plugin("io.gitlab.arturbosch.detekt")
-        plugin("maven-publish")
     }
 
     repositories {
         mavenCentral()
-    }
-
-    dependencies {
-        implementation(kotlin("reflect"))
-        val junitJupiterVersion = "5.9.0"
-        implementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
-        testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
-        testRuntimeOnly("org.junit.platform:junit-platform-console:1.9.2")
-    }
-
-    tasks.test {
-        useJUnitPlatform()
     }
 
     kotlin {
@@ -71,22 +56,28 @@ fun getLocalProperty(key: String, file: String = "local.properties"): String? {
 val spaceUsername = getLocalProperty("spaceUsername")
 val spacePassword = getLocalProperty("spacePassword")
 
-publishing {
-    publications {
-        register<MavenPublication>("maven") {
-            groupId = rootProject.group.toString()
-            artifactId = rootProject.name
-            version = rootProject.version.toString()
-            from(components["java"])
-        }
-    }
+configure(subprojects) {
+    apply(plugin = "maven-publish")
 
-    repositories {
-        maven {
-            url = uri("https://packages.jetbrains.team/maven/p/kotlin-test-framework/kotlin-test-framework")
-            credentials {
-                username = spaceUsername
-                password = spacePassword
+    val subprojectName = this.name
+
+    publishing {
+        publications {
+            register<MavenPublication>("maven") {
+                groupId = rootProject.group.toString()
+                artifactId = subprojectName
+                version = rootProject.version.toString()
+                from(components["java"])
+            }
+        }
+
+        repositories {
+            maven {
+                url = uri("https://packages.jetbrains.team/maven/p/big-code/bigcode")
+                credentials {
+                    username = spaceUsername
+                    password = spacePassword
+                }
             }
         }
     }

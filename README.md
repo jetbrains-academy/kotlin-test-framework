@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.academy.test.system:kotlin-test-system:$latest_version")
+    implementation("org.jetbrains.academy.test.system:<module-name>:$latest_version")
 }
 ```
 
