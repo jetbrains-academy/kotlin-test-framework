@@ -2,6 +2,7 @@ package org.jetbrains.academy.test.system.models.variable
 
 import org.jetbrains.academy.test.system.getShortName
 import org.jetbrains.academy.test.system.models.Visibility
+import org.jetbrains.academy.test.system.models.asVisibility
 import org.jetbrains.academy.test.system.models.getVisibility
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
@@ -12,20 +13,20 @@ import kotlin.reflect.jvm.javaType
  * Represents all field's properties. Only for class-like objects.
  *
  * @param name stores a name of the field.
- * @param visibilityKey stores a visibility key, see [Visibility].
+ * @param visibility stores field's visibility, see [Visibility].
  * @param mutability stores field's mutability, see [VariableMutability].
  * @param javaType stores a short name of java type.
  */
 internal data class FieldProperties(
     val name: String,
-    val visibilityKey: String?,
+    val visibility: Visibility?,
     val mutability: VariableMutability?,
     val javaType: String,
 ) {
     companion object {
         fun buildByKotlinProp(kotlinProp: KProperty<*>) = FieldProperties(
             kotlinProp.name,
-            kotlinProp.visibility?.name,
+            kotlinProp.visibility?.asVisibility(),
             kotlinProp.getVariableMutability(),
             kotlinProp.returnType.javaType.getShortName(),
         )
@@ -38,7 +39,7 @@ internal data class FieldProperties(
 
         fun buildByJavaField(field: Field) = FieldProperties(
             field.name,
-            field.getVisibility()?.name,
+            field.getVisibility(),
             field.getMutabilityByJavaField(),
             field.type.getShortName(),
         )
@@ -49,7 +50,7 @@ internal data class FieldProperties(
         val visibilityErrorMessage = variable.visibility?.let {
             "The visibility of the field ${variable.name} must be ${it.key}"
         } ?: "The filed ${variable.name} should not have any modifiers"
-        assert(visibilityKey?.lowercase() == variable.visibility?.key) { visibilityErrorMessage }
+        assert(visibility?.key?.lowercase() == variable.visibility?.key) { visibilityErrorMessage }
         if (toCheckMutability) {
             val mutabilityErrorMessage = variable.mutability?.let {
                 "The field ${variable.name} must be ${it.key}"

@@ -1,4 +1,4 @@
-@file:Suppress("FunctionOnlyReturningConstant")
+@file:Suppress("FunctionOnlyReturningConstant", "VarCouldBeVal")
 
 package org.jetbrains.academy.test.system.testData.dataClass
 

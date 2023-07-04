@@ -65,7 +65,7 @@ class DataClassTests {
     private fun sumMethodTest(sumMethod: TestMethod, a: Int, b: Int, expected: Int) {
         val invokeData = sumMethod.getInvokeData()
         val actualSum = dataClassTestClass.invokeMethodWithArgs(
-            args = arrayOf(a, b),
+            a, b,
             invokeData = invokeData,
             isPrivate = sumMethod.visibility == Visibility.PRIVATE
         ).toString()

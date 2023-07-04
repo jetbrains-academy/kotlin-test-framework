@@ -11,7 +11,7 @@ import kotlin.reflect.jvm.kotlinFunction
  * Represents any function in the code, e.g. a member function, a top level function, etc.
  *
  * @param name represents a method name.
- * @param returnType represents a Kotlin return type, see [TestMethod].
+ * @param returnType represents a Kotlin return type, see [TestKotlinType].
  * @param arguments represents a list of arguments, see [TestVariable].
  * @param returnTypeJava represents the short name of a Java return type.
  * @param visibility represents [Visibility] of the method.

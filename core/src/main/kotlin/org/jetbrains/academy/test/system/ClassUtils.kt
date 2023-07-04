@@ -3,6 +3,7 @@ package org.jetbrains.academy.test.system
 import org.jetbrains.academy.test.system.models.Visibility
 import org.jetbrains.academy.test.system.models.classes.ClassType
 import org.jetbrains.academy.test.system.models.classes.TestClass
+import org.jetbrains.academy.test.system.models.getVisibility
 import java.lang.reflect.Modifier
 import kotlin.jvm.internal.DefaultConstructorMarker
 
