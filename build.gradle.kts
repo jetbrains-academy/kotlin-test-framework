@@ -7,19 +7,39 @@ plugins {
 }
 
 group = "org.jetbrains.academy.test.system"
-version = "1.0.9"
+version = "2.0.0"
 
-repositories {
-    mavenCentral()
-}
+allprojects {
+    apply {
+        plugin("kotlin")
+        plugin("io.gitlab.arturbosch.detekt")
+    }
 
-dependencies {
-    implementation(kotlin("reflect"))
-    val junitJupiterVersion = "5.9.0"
-    implementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
-    testRuntimeOnly("org.junit.platform:junit-platform-console:1.9.2")
+    repositories {
+        mavenCentral()
+    }
+
+    kotlin {
+        jvmToolchain(11)
+    }
+
+    apply<io.gitlab.arturbosch.detekt.DetektPlugin>()
+
+    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
+        config = rootProject.files("detekt.yml")
+        buildUponDefaultConfig = true
+        debug = true
+    }
+
+    val detektReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
+        output.set(rootProject.buildDir.resolve("reports/detekt/merge.sarif"))
+    }
+
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
+        finalizedBy(detektReportMerge)
+        reports.sarif.required.set(true)
+        detektReportMerge.get().input.from(sarifReportFile)
+    }
 }
 
 fun getLocalProperty(key: String, file: String = "local.properties"): String? {
@@ -33,51 +53,31 @@ fun getLocalProperty(key: String, file: String = "local.properties"): String? {
     return properties.getProperty(key, null)
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
-kotlin {
-    jvmToolchain(11)
-}
-
-apply<io.gitlab.arturbosch.detekt.DetektPlugin>()
-
-configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
-    config = rootProject.files("detekt.yml")
-    buildUponDefaultConfig = true
-    debug = true
-}
-
-val detektReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-    output.set(rootProject.buildDir.resolve("reports/detekt/merge.sarif"))
-}
-
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
-    finalizedBy(detektReportMerge)
-    reports.sarif.required.set(true)
-    detektReportMerge.get().input.from(sarifReportFile)
-}
-
 val spaceUsername = getLocalProperty("spaceUsername")
 val spacePassword = getLocalProperty("spacePassword")
 
-publishing {
-    publications {
-        register<MavenPublication>("maven") {
-            groupId = rootProject.group.toString()
-            artifactId = rootProject.name
-            version = rootProject.version.toString()
-            from(components["java"])
-        }
-    }
+configure(subprojects) {
+    apply(plugin = "maven-publish")
 
-    repositories {
-        maven {
-            url = uri("https://packages.jetbrains.team/maven/p/kotlin-test-framework/kotlin-test-framework")
-            credentials {
-                username = spaceUsername
-                password = spacePassword
+    val subprojectName = this.name
+
+    publishing {
+        publications {
+            register<MavenPublication>("maven") {
+                groupId = rootProject.group.toString()
+                artifactId = subprojectName
+                version = rootProject.version.toString()
+                from(components["java"])
+            }
+        }
+
+        repositories {
+            maven {
+                url = uri("https://packages.jetbrains.team/maven/p/big-code/bigcode")
+                credentials {
+                    username = spaceUsername
+                    password = spacePassword
+                }
             }
         }
     }

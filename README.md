@@ -11,7 +11,7 @@ by using the [Java Reflection API](https://docs.oracle.com/javase/8/docs/technot
 The proposed wrappers allow us to check the necessary Kotlin properties, 
 such as `val` and `var` modifiers or whether the class is a data class for any Java objects.
 
-You can find several usage examples in the [test](./src/test/kotlin/org/jetbrains/academy/test/system) folder.
+You can find several usage examples in the [test](core/src/test/kotlin/org/jetbrains/academy/test/system) folder.
 
 ## Getting started
 
@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.academy.test.system:kotlin-test-system:$latest_version")
+    implementation("org.jetbrains.academy.test.system:<module-name>:$latest_version")
 }
 ```
 

@@ -5,5 +5,10 @@ pluginManagement {
     }
     
 }
-rootProject.name = "kotlin-test-system"
 
+include(
+    "core",
+    "ij",
+)
+
+rootProject.name = "kotlin-test-system"
