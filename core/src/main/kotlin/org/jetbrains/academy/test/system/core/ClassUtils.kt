@@ -1,9 +1,9 @@
-package org.jetbrains.academy.test.system
+package org.jetbrains.academy.test.system.core
 
-import org.jetbrains.academy.test.system.models.Visibility
-import org.jetbrains.academy.test.system.models.classes.ClassType
-import org.jetbrains.academy.test.system.models.classes.TestClass
-import org.jetbrains.academy.test.system.models.getVisibility
+import org.jetbrains.academy.test.system.core.models.Visibility
+import org.jetbrains.academy.test.system.core.models.classes.ClassType
+import org.jetbrains.academy.test.system.core.models.classes.TestClass
+import org.jetbrains.academy.test.system.core.models.getVisibility
 import java.lang.reflect.Modifier
 import kotlin.jvm.internal.DefaultConstructorMarker
 

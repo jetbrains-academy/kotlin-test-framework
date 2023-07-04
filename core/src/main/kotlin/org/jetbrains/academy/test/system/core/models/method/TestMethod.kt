@@ -1,9 +1,9 @@
-package org.jetbrains.academy.test.system.models.method
+package org.jetbrains.academy.test.system.core.models.method
 
-import org.jetbrains.academy.test.system.checkType
-import org.jetbrains.academy.test.system.models.TestKotlinType
-import org.jetbrains.academy.test.system.models.Visibility
-import org.jetbrains.academy.test.system.models.variable.TestVariable
+import org.jetbrains.academy.test.system.core.checkType
+import org.jetbrains.academy.test.system.core.models.TestKotlinType
+import org.jetbrains.academy.test.system.core.models.Visibility
+import org.jetbrains.academy.test.system.core.models.variable.TestVariable
 import java.lang.reflect.Method
 import kotlin.reflect.jvm.kotlinFunction
 

@@ -1,9 +1,9 @@
-package org.jetbrains.academy.test.system.testData.dataClass
+package org.jetbrains.academy.test.system.core.testData.dataClass
 
-import org.jetbrains.academy.test.system.models.TestKotlinType
-import org.jetbrains.academy.test.system.models.Visibility
-import org.jetbrains.academy.test.system.models.method.TestMethod
-import org.jetbrains.academy.test.system.models.variable.TestVariable
+import org.jetbrains.academy.test.system.core.models.TestKotlinType
+import org.jetbrains.academy.test.system.core.models.Visibility
+import org.jetbrains.academy.test.system.core.models.method.TestMethod
+import org.jetbrains.academy.test.system.core.models.variable.TestVariable
 
 val publicValGetterMethod = TestMethod(
     name = "getPublicVal",

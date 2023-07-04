@@ -1,9 +1,9 @@
-package org.jetbrains.academy.test.system.models.variable
+package org.jetbrains.academy.test.system.core.models.variable
 
-import org.jetbrains.academy.test.system.getShortName
-import org.jetbrains.academy.test.system.models.Visibility
-import org.jetbrains.academy.test.system.models.asVisibility
-import org.jetbrains.academy.test.system.models.getVisibility
+import org.jetbrains.academy.test.system.core.getShortName
+import org.jetbrains.academy.test.system.core.models.Visibility
+import org.jetbrains.academy.test.system.core.models.asVisibility
+import org.jetbrains.academy.test.system.core.models.getVisibility
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import kotlin.reflect.KProperty

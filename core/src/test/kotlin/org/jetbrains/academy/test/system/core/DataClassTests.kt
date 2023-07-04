@@ -1,10 +1,10 @@
-package org.jetbrains.academy.test.system
+package org.jetbrains.academy.test.system.core
 
-import org.jetbrains.academy.test.system.models.Visibility
-import org.jetbrains.academy.test.system.models.classes.ConstructorGetter
-import org.jetbrains.academy.test.system.models.method.TestMethod
-import org.jetbrains.academy.test.system.models.method.TestMethodInvokeData
-import org.jetbrains.academy.test.system.testData.dataClass.*
+import org.jetbrains.academy.test.system.core.models.Visibility
+import org.jetbrains.academy.test.system.core.models.classes.ConstructorGetter
+import org.jetbrains.academy.test.system.core.models.method.TestMethod
+import org.jetbrains.academy.test.system.core.models.method.TestMethodInvokeData
+import org.jetbrains.academy.test.system.core.testData.dataClass.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

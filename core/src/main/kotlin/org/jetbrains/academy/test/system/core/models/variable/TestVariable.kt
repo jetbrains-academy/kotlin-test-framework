@@ -1,11 +1,11 @@
 @file:Suppress("ForbiddenComment")
 
-package org.jetbrains.academy.test.system.models.variable
+package org.jetbrains.academy.test.system.core.models.variable
 
-import org.jetbrains.academy.test.system.checkType
-import org.jetbrains.academy.test.system.models.TestKotlinType
-import org.jetbrains.academy.test.system.models.Visibility
-import org.jetbrains.academy.test.system.throwInternalLibError
+import org.jetbrains.academy.test.system.core.checkType
+import org.jetbrains.academy.test.system.core.models.TestKotlinType
+import org.jetbrains.academy.test.system.core.models.Visibility
+import org.jetbrains.academy.test.system.core.throwInternalLibError
 import java.io.File
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier

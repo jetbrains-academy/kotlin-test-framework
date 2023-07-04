@@ -1,4 +1,4 @@
-package org.jetbrains.academy.test.system.models
+package org.jetbrains.academy.test.system.core.models
 
 /**
  * Represents a kotlin type. Consider several examples:

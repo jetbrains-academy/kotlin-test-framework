@@ -1,12 +1,12 @@
 @file:Suppress("FunctionOnlyReturningConstant", "VarCouldBeVal")
 
-package org.jetbrains.academy.test.system.testData.dataClass
+package org.jetbrains.academy.test.system.core.testData.dataClass
 
-import org.jetbrains.academy.test.system.models.TestKotlinType
-import org.jetbrains.academy.test.system.models.Visibility
-import org.jetbrains.academy.test.system.models.classes.TestClass
-import org.jetbrains.academy.test.system.models.variable.TestVariable
-import org.jetbrains.academy.test.system.models.variable.VariableMutability
+import org.jetbrains.academy.test.system.core.models.TestKotlinType
+import org.jetbrains.academy.test.system.core.models.Visibility
+import org.jetbrains.academy.test.system.core.models.classes.TestClass
+import org.jetbrains.academy.test.system.core.models.variable.TestVariable
+import org.jetbrains.academy.test.system.core.models.variable.VariableMutability
 
 typealias MyTypeAlias = String
 
@@ -32,7 +32,7 @@ data class DataClass(
 
 val dataClassTestClass = TestClass(
     "DataClass",
-    "org.jetbrains.academy.test.system.testData.dataClass",
+    "org.jetbrains.academy.test.system.core.testData.dataClass",
     isDataClass = true,
     declaredFields = listOf(
         TestVariable(

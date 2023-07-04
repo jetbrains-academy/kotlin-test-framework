@@ -1,10 +1,10 @@
-package org.jetbrains.academy.test.system.models.classes
+package org.jetbrains.academy.test.system.core.models.classes
 
-import org.jetbrains.academy.test.system.*
-import org.jetbrains.academy.test.system.models.Visibility
-import org.jetbrains.academy.test.system.models.method.TestMethod
-import org.jetbrains.academy.test.system.models.method.TestMethodInvokeData
-import org.jetbrains.academy.test.system.models.variable.TestVariable
+import org.jetbrains.academy.test.system.core.*
+import org.jetbrains.academy.test.system.core.models.Visibility
+import org.jetbrains.academy.test.system.core.models.method.TestMethod
+import org.jetbrains.academy.test.system.core.models.method.TestMethodInvokeData
+import org.jetbrains.academy.test.system.core.models.variable.TestVariable
 import java.lang.reflect.Constructor
 import java.lang.reflect.Method
 

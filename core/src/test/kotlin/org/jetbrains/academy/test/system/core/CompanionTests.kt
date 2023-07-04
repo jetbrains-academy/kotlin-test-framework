@@ -1,8 +1,8 @@
-package org.jetbrains.academy.test.system
+package org.jetbrains.academy.test.system.core
 
-import org.jetbrains.academy.test.system.models.classes.ConstructorGetter
-import org.jetbrains.academy.test.system.testData.companion.myClassTestClass
-import org.jetbrains.academy.test.system.testData.companion.myClassTestClassTestClass
+import org.jetbrains.academy.test.system.core.models.classes.ConstructorGetter
+import org.jetbrains.academy.test.system.core.testData.companion.myClassTestClass
+import org.jetbrains.academy.test.system.core.testData.companion.myClassTestClassTestClass
 import org.junit.jupiter.api.Test
 
 class CompanionTests {

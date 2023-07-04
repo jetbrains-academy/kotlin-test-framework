@@ -1,4 +1,4 @@
-package org.jetbrains.academy.test.system.models
+package org.jetbrains.academy.test.system.core.models
 
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier

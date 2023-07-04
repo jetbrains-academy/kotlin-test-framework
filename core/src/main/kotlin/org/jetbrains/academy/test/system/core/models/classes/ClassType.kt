@@ -1,4 +1,4 @@
-package org.jetbrains.academy.test.system.models.classes
+package org.jetbrains.academy.test.system.core.models.classes
 
 /**
  * Represents all possible class types which are supported by this test framework.

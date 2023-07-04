@@ -1,4 +1,4 @@
-package org.jetbrains.academy.test.system.models.variable
+package org.jetbrains.academy.test.system.core.models.variable
 
 import java.lang.reflect.Field
 import kotlin.reflect.KProperty

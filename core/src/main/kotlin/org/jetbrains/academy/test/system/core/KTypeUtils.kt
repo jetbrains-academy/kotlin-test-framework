@@ -1,6 +1,6 @@
-package org.jetbrains.academy.test.system
+package org.jetbrains.academy.test.system.core
 
-import org.jetbrains.academy.test.system.models.TestKotlinType
+import org.jetbrains.academy.test.system.core.models.TestKotlinType
 import kotlin.reflect.KType
 import kotlin.reflect.jvm.javaType
 

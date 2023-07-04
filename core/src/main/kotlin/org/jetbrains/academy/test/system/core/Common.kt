@@ -1,6 +1,6 @@
-package org.jetbrains.academy.test.system
+package org.jetbrains.academy.test.system.core
 
-import org.jetbrains.academy.test.system.models.Visibility
+import org.jetbrains.academy.test.system.core.models.Visibility
 import java.lang.reflect.Modifier
 import java.lang.reflect.Type
 

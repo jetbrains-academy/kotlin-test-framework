@@ -1,8 +1,8 @@
-package org.jetbrains.academy.test.system.models.method
+package org.jetbrains.academy.test.system.core.models.method
 
-import org.jetbrains.academy.test.system.findMethod
-import org.jetbrains.academy.test.system.models.Visibility
-import org.jetbrains.academy.test.system.models.classes.TestClass
+import org.jetbrains.academy.test.system.core.findMethod
+import org.jetbrains.academy.test.system.core.models.Visibility
+import org.jetbrains.academy.test.system.core.models.classes.TestClass
 
 /**
  * Represents a special class to store any necessary information to invoke a method.

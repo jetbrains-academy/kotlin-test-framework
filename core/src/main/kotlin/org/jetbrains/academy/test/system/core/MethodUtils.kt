@@ -1,6 +1,6 @@
-package org.jetbrains.academy.test.system
+package org.jetbrains.academy.test.system.core
 
-import org.jetbrains.academy.test.system.models.method.TestMethod
+import org.jetbrains.academy.test.system.core.models.method.TestMethod
 import java.lang.reflect.Method
 
 fun Method.invokeWithoutArgs(
