@@ -127,9 +127,9 @@ data class TestClass(
 
     fun checkMethod(clazz: Class<*>, method: TestMethod) {
         val candidates = if (method.visibility == Visibility.PRIVATE) {
-            clazz.methods // private methods
+            clazz.declaredMethods // private methods
         } else {
-            clazz.declaredMethods // methods
+            clazz.methods // other methods
         }
 
         method.checkMethod(candidates.findMethod(method))
