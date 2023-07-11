@@ -123,18 +123,16 @@ data class TestClass(
         return constructors.first()
     }
 
-    fun checkDeclaredMethods(clazz: Class<*>) {
-        val methods = clazz.methods
-        val privateMethods = clazz.declaredMethods
-        customMethods.forEach {
-            val candidates = if (it.visibility == Visibility.PRIVATE) {
-                privateMethods
-            } else {
-                methods
-            }
-            val method = candidates.findMethod(it)
-            it.checkMethod(method)
+    fun checkDeclaredMethods(clazz: Class<*>) = customMethods.forEach { checkMethod(clazz, it) }
+
+    fun checkMethod(clazz: Class<*>, method: TestMethod) {
+        val candidates = if (method.visibility == Visibility.PRIVATE) {
+            clazz.methods // private methods
+        } else {
+            clazz.declaredMethods // methods
         }
+
+        method.checkMethod(candidates.findMethod(method))
     }
 
     fun findMethod(clazz: Class<*>, method: TestMethod): Method {
