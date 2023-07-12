@@ -4,11 +4,14 @@ import org.jetbrains.academy.test.system.core.models.Visibility
 import java.lang.reflect.Modifier
 import java.lang.reflect.Type
 
-fun Type.getShortName() = if ("<" in this.toString()) {
-    val types = this.toString().split("<").toMutableList()
-    types[0].getShortName()
-} else {
-    this.toString().getShortName()
+fun Type.getShortName(): String {
+    val strRepresentation = this.toString().removePrefix("class ")
+    return if ("<" in strRepresentation) {
+        val types = this.toString().split("<").toMutableList()
+        types[0].getShortName()
+    } else {
+        strRepresentation.getShortName()
+    }
 }
 
 fun String.getShortName() = lowercase().split(".").last()
