@@ -1,12 +1,20 @@
 package org.jetbrains.academy.test.system.ij.formatting
 
+import com.intellij.psi.PsiFile
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class FormattingUtilTests : BasePlatformTestCase() {
 
+    private fun testWithError(code: String, action: (PsiFile) -> Unit) {
+        assertThrows(AssertionError::class.java) { action(myFixture.configureByText("dummy.kt", code)) }
+    }
+
+    private fun testWithoutError(code: String, action: (PsiFile) -> Unit) {
+        action(myFixture.configureByText("dummy.kt", code))
+    }
+
     fun testWrongFormatting() {
-        val psi = myFixture.configureByText(
-            "dummy.kt",
+        testWithError(
             """
                 fun funWithFormattingIssues() {
                       println ("This function is definitely has formatting issues" )
@@ -16,15 +24,11 @@ class FormattingUtilTests : BasePlatformTestCase() {
                     }
                 }
             """.trimIndent()
-        )
-        assertThrows(AssertionError::class.java) {
-            psi.checkIfFormattingRulesWereApplied()
-        }
+        ) { it.checkIfFormattingRulesWereApplied() }
     }
 
     fun testRightFormatting() {
-        val psi = myFixture.configureByText(
-            "dummy.kt",
+        testWithoutError(
             """
                 fun funWithFormattingIssues() {
                     println("This function is definitely has formatting issues")
@@ -34,13 +38,11 @@ class FormattingUtilTests : BasePlatformTestCase() {
                     }
                 }
             """.trimIndent()
-        )
-        psi.checkIfFormattingRulesWereApplied()
+        ) { it.checkIfFormattingRulesWereApplied() }
     }
 
     fun testUnusedImports() {
-        val psi = myFixture.configureByText(
-            "dummy.kt",
+        testWithError(
             """
                 import java.io.File
                 
@@ -53,14 +55,11 @@ class FormattingUtilTests : BasePlatformTestCase() {
                 }
             """.trimIndent()
         )
-        assertThrows(AssertionError::class.java) {
-            psi.checkIfOptimizeImportsWereApplied()
-        }
+        { it.checkIfOptimizeImportsWereApplied() }
     }
 
     fun testUsedImports() {
-        val psi = myFixture.configureByText(
-            "dummy.kt",
+        testWithoutError(
             """
                 fun funWithFormattingIssues() {
                     println("This function is definitely has formatting issues")
@@ -70,7 +69,6 @@ class FormattingUtilTests : BasePlatformTestCase() {
                     }
                 }
             """.trimIndent()
-        )
-        psi.checkIfOptimizeImportsWereApplied()
+        ) { it.checkIfOptimizeImportsWereApplied() }
     }
 }

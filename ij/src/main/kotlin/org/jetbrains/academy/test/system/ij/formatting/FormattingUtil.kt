@@ -25,15 +25,16 @@ fun PsiFile.checkIfFormattingRulesWereApplied() {
 
 fun PsiFile.checkIfOptimizeImportsWereApplied() {
     val inspection = KotlinUnusedImportInspection()
-    var problems: List<ProblemDescriptor>? = null
+    val problems: MutableList<ProblemDescriptor> = mutableListOf()
     val inspectionManager = InspectionManager.getInstance(project)
     ProgressManager.getInstance().executeProcessUnderProgress(
         {
-            problems = ApplicationManager.getApplication().runReadAction<List<ProblemDescriptor>?> {
+            problems.addAll(
+                ApplicationManager.getApplication().runReadAction<List<ProblemDescriptor>> {
                 inspection.processFile(this, inspectionManager)
-            }
+                })
         },
         DaemonProgressIndicator()
     )
-    assert(problems.isNullOrEmpty()) { "Please, apply \"Optimize import\" option when formatting code." }
+    assert(problems.isNotEmpty()) { "Please, apply \"Optimize import\" option when formatting code." }
 }
