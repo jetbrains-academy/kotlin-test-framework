@@ -73,7 +73,7 @@ configure(subprojects) {
 
         repositories {
             maven {
-                url = uri("https://packages.jetbrains.team/maven/p/big-code/bigcode")
+                url = uri("https://packages.jetbrains.team/maven/p/kotlin-test-framework/kotlin-test-framework")
                 credentials {
                     username = spaceUsername
                     password = spacePassword
