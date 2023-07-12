@@ -36,5 +36,5 @@ fun PsiFile.checkIfOptimizeImportsWereApplied() {
         },
         DaemonProgressIndicator()
     )
-    assert(problems.isNotEmpty()) { "Please, apply \"Optimize import\" option when formatting code." }
+    assert(problems.isEmpty()) { "Please, apply \"Optimize import\" option when formatting code." }
 }
