@@ -4,6 +4,7 @@ package org.jetbrains.academy.test.system.ij.formatting
 
 import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator
 import com.intellij.codeInspection.InspectionManager
+import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
@@ -23,18 +24,25 @@ fun PsiFile.checkIfFormattingRulesWereApplied() {
     assert(originalCode.trimIndent() == formattedCode.trimIndent()) { "The code after formatting should be:${System.lineSeparator()}$formattedCode${System.lineSeparator()}Please, apply code formatting refactoring to the code." }
 }
 
-fun PsiFile.checkIfOptimizeImportsWereApplied() {
-    val inspection = KotlinUnusedImportInspection()
+fun PsiFile.checkIfInspectionsWerePassed(inspections: List<LocalInspectionTool>): Boolean {
     val problems: MutableList<ProblemDescriptor> = mutableListOf()
     val inspectionManager = InspectionManager.getInstance(project)
     ProgressManager.getInstance().executeProcessUnderProgress(
         {
-            problems.addAll(
-                ApplicationManager.getApplication().runReadAction<List<ProblemDescriptor>> {
-                inspection.processFile(this, inspectionManager)
-                })
+            for (inspection in inspections) {
+                problems.addAll(
+                    ApplicationManager.getApplication().runReadAction<List<ProblemDescriptor>> {
+                        inspection.processFile(this, inspectionManager)
+                    })
+            }
         },
         DaemonProgressIndicator()
     )
-    assert(problems.isEmpty()) { "Please, apply \"Optimize import\" option when formatting code." }
+    return problems.isEmpty()
+}
+
+fun PsiFile.checkIfOptimizeImportsWereApplied() {
+    assert(this.checkIfInspectionsWerePassed(listOf(KotlinUnusedImportInspection()))) {
+        "Please, apply \"Optimize import\" option when formatting code."
+    }
 }
