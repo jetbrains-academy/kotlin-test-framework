@@ -25,7 +25,6 @@ class BaseIjTestClassTests : BaseIjTestClass() {
                 }
             }
         """.trimIndent()
-        setUp()
         myFixture.configureByText("Task.kt", example)
         val content = "println(\"Content\")"
         assert(listOf("method1", "method3").equals(getMethodsContainingContent(content)))
@@ -37,7 +36,6 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             private val notConstant = 0.5
             const val CONSTANT2 = 2
         """.trimIndent()
-        setUp()
         myFixture.configureByText("Task.kt", example)
         assert(existsConstantWithTheValue("\"some text\""))
         assert(existsConstantWithTheValue("2"))
