@@ -22,7 +22,9 @@ open class BaseIjTestClass : BasePlatformTestCase() {
                     when (element) {
                         is KtNamedFunction -> currentMethod = element.name.toString()
                         is KtBlockExpression -> {
-                            if (element.text.contains(content)) methodNames.add(currentMethod)
+                            if (element.text.contains(content)) {
+                                methodNames.add(currentMethod)
+                            }
                         }
                     }
                     super.visitElement(element)
@@ -40,9 +42,11 @@ open class BaseIjTestClass : BasePlatformTestCase() {
                     if (element is KtProperty &&
                         element.modifierList?.text?.contains("const") == true &&
                         element.text.contains(elementValue)
-                    )
+                    ) {
                         existsConstant = true
-                    else super.visitElement(element)
+                    } else {
+                        super.visitElement(element)
+                    }
                 }
             })
         }
