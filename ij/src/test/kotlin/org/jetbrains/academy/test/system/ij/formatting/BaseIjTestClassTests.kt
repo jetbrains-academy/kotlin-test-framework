@@ -4,7 +4,7 @@ import org.jetbrains.academy.test.system.test.BaseIjTestClass
 
 class BaseIjTestClassTests : BaseIjTestClass() {
 
-    fun testMethodsContainingContent() {
+    fun testFindMethodsWithContent() {
         val example = """
             class ExampleClass {
 
@@ -27,18 +27,18 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
         val content = "println(\"Content\")"
-        assert(listOf("method1", "method3").equals(getMethodsContainingContent(content)))
+        assert(listOf("method1", "method3").equals(findMethodsWithContent(content)))
     }
 
-    fun testExistsConstant() {
+    fun testHasConstantWithGivenValue() {
         val example = """
             private const val CONSTANT1 = "some text"
             private val notConstant = 0.5
             const val CONSTANT2 = 2
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
-        assert(existsConstantWithTheValue("\"some text\""))
-        assert(existsConstantWithTheValue("2"))
-        assert(!existsConstantWithTheValue("0.5"))
+        assert(hasConstantWithGivenValue("\"some text\""))
+        assert(hasConstantWithGivenValue("2"))
+        assert(!hasConstantWithGivenValue("0.5"))
     }
 }

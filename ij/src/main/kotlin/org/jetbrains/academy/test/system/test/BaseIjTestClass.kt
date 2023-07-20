@@ -13,15 +13,18 @@ import org.jetbrains.kotlin.psi.KtProperty
  */
 open class BaseIjTestClass : BasePlatformTestCase() {
 
-    fun getMethodsContainingContent(content: String): List<String> {
+    fun findMethodsWithContent(content: String): List<String> {
         val methodNames = mutableListOf<String>()
         var currentMethod = ""
         ApplicationManager.getApplication().runReadAction<Unit?> {
             myFixture.file.accept(object : PsiRecursiveElementWalkingVisitor() {
                 override fun visitElement(element: PsiElement) {
-                    if (element is KtNamedFunction) currentMethod = element.name.toString()
-                    if (element is KtBlockExpression && element.text.contains(content))
-                        methodNames.add(currentMethod)
+                    when (element) {
+                        is KtNamedFunction -> currentMethod = element.name.toString()
+                        is KtBlockExpression -> {
+                            if (element.text.contains(content)) methodNames.add(currentMethod)
+                        }
+                    }
                     super.visitElement(element)
                 }
             })
@@ -29,15 +32,17 @@ open class BaseIjTestClass : BasePlatformTestCase() {
         return methodNames
     }
 
-    fun existsConstantWithTheValue(elementValue: String): Boolean {
+    fun hasConstantWithGivenValue(elementValue: String): Boolean {
         var existsConstant = false
         ApplicationManager.getApplication().runReadAction<Unit?> {
             myFixture.file.accept(object : PsiRecursiveElementWalkingVisitor() {
                 override fun visitElement(element: PsiElement) {
-                    if (element is KtProperty && element.modifierList?.text?.contains("const") == true) {
-                        if (element.text.contains(elementValue)) existsConstant = true
-                    }
-                    super.visitElement(element)
+                    if (element is KtProperty &&
+                        element.modifierList?.text?.contains("const") == true &&
+                        element.text.contains(elementValue)
+                    )
+                        existsConstant = true
+                    else super.visitElement(element)
                 }
             })
         }
