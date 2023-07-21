@@ -43,20 +43,25 @@ fun PsiFile.hasConstantWithGivenValue(elementValue: String): Boolean =
     }
 
 /**
- * Retrieves the body of a named function as a string.
+ * Retrieves the body with braces of a named function as a string.
  *
  * @return The body of the function as a string, or null if the function has no body.
  * @throws IllegalStateException if the function contains more than one body.
  */
-private fun KtNamedFunction.getBody(): String? {
+private fun KtNamedFunction.getBlockBody(): String? {
     val possibleBody = extractElementsOfTypes(listOf(KtBlockExpression::class.java))
     if (possibleBody.isEmpty()) {
         return null
     }
     require(possibleBody.size == 1) { "Parser error! A function must have only one body" }
-    return possibleBody.first().text
-        .split(System.lineSeparator()).drop(1).dropLast(1).joinToString(System.lineSeparator()).trimIndent()
+    return possibleBody.first().text.trimBraces().trimIndent()
 }
+
+/**
+ * Trims leading and trailing braces from a string.
+ */
+private fun String.trimBraces() = dropWhile { it.isWhitespace() }.removePrefix("{")
+    .dropLastWhile { it.isWhitespace() }.removeSuffix("}")
 
 /**
  * Finds methods within the given PsiFile that have the specified body content.
@@ -72,5 +77,5 @@ fun PsiFile.findMethodsWithContent(content: String): List<String> =
         val formattingContent = contentPsiFile.formatting() ?: ""
 
         val methods = extractElementsOfTypes(listOf(KtNamedFunction::class.java))
-        methods.filter { it.getBody() == formattingContent }.mapNotNull { it.name }.toList()
+        methods.filter { it.getBlockBody() == formattingContent }.mapNotNull { it.name }.toList()
     }

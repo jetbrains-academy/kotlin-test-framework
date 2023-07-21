@@ -37,6 +37,20 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         }
     }
 
+    fun testFindMethodsWithSingleLineContent() {
+        val example = """
+            class ExampleClass {
+                fun method() =  { "Some actions" }
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.kt", example)
+        val content = """"Some actions"""".trimIndent()
+        val methodName = "method"
+        assert(listOf(methodName).equals(findMethodsWithContent(content))) {
+            "The name of a method with this content \n $content \n must be $methodName"
+        }
+    }
+
     fun testFindMethodsWithContentWithBrokenFormatting() {
         val example = """
             class ExampleClass {
