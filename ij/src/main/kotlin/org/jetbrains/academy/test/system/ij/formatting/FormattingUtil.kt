@@ -20,6 +20,14 @@ fun PsiFile.checkIfFormattingRulesWereApplied() {
     assert(originalCode.trimIndent() == formattedCode.trimIndent()) { "The code after formatting should be:${System.lineSeparator()}$formattedCode${System.lineSeparator()}Please, apply code formatting refactoring to the code." }
 }
 
+fun PsiFile.formatting(): String? {
+    val codeStyleManager = CodeStyleManager.getInstance(project)
+    WriteCommandAction.runWriteCommandAction(project) {
+        codeStyleManager.reformat(this)
+    }
+    return ApplicationManager.getApplication().runReadAction<String> { text }
+}
+
 fun PsiFile.checkIfOptimizeImportsWereApplied() {
     assert(applyInspections(listOf(KotlinUnusedImportInspection())).isEmpty()) {
         "Please, apply \"Optimize import\" option when formatting code."
