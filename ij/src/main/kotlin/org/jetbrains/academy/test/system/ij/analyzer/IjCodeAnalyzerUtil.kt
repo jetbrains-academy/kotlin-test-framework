@@ -11,8 +11,8 @@ import org.jetbrains.kotlin.psi.*
 
 /** Extracts [kotlin elements][KtElement] of given type from kotlin related files in project. */
 /** Extracts elements of given type from [PsiElement] subtree. */
-fun <T : PsiElement> PsiElement.extractElementsOfTypes(vararg psiElementClassList: Class<out T>): MutableCollection<T> =
-    psiElementClassList.flatMap { PsiTreeUtil.collectElementsOfType(this, it) }.toMutableList()
+fun <T : PsiElement> PsiElement.extractElementsOfTypes(vararg psiElementClass: Class<out T>): MutableCollection<T> =
+    psiElementClass.flatMap { PsiTreeUtil.collectElementsOfType(this, it) }.toMutableList()
 
 /**
  * Retrieves the constant value of a property, if it is declared as a constant.
