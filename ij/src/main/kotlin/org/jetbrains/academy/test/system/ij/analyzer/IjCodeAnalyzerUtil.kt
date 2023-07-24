@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.*
 
 /** Extracts [kotlin elements][KtElement] of given type from kotlin related files in project. */
 /** Extracts elements of given type from [PsiElement] subtree. */
-fun <T : PsiElement> PsiElement.extractElementsOfTypes(psiElementClassList: List<Class<out T>>): MutableCollection<T> =
+fun <T : PsiElement> PsiElement.extractElementsOfTypes(vararg psiElementClassList: Class<out T>): MutableCollection<T> =
     psiElementClassList.flatMap { PsiTreeUtil.collectElementsOfType(this, it) }.toMutableList()
 
 /**
@@ -22,7 +22,7 @@ fun <T : PsiElement> PsiElement.extractElementsOfTypes(psiElementClassList: List
  */
 private fun KtProperty.getConstValue(): String? {
     val possibleValue =
-        extractElementsOfTypes(listOf(KtConstantExpression::class.java, KtStringTemplateExpression::class.java))
+        extractElementsOfTypes(KtConstantExpression::class.java, KtStringTemplateExpression::class.java)
     if (possibleValue.isEmpty()) {
         return null
     }
@@ -38,7 +38,7 @@ private fun KtProperty.getConstValue(): String? {
  */
 fun PsiFile.hasConstantWithGivenValue(elementValue: String): Boolean =
     ApplicationManager.getApplication().runReadAction<Boolean> {
-        val elements = extractElementsOfTypes(listOf(KtProperty::class.java))
+        val elements = extractElementsOfTypes(KtProperty::class.java)
         elements.any { it.modifierList?.text?.contains("const") ?: false && it.getConstValue() == elementValue }
     }
 
@@ -49,7 +49,7 @@ fun PsiFile.hasConstantWithGivenValue(elementValue: String): Boolean =
  * @throws IllegalStateException if the function contains more than one body.
  */
 private fun KtNamedFunction.getBlockBody(): String? {
-    val possibleBody = extractElementsOfTypes(listOf(KtBlockExpression::class.java))
+    val possibleBody = extractElementsOfTypes(KtBlockExpression::class.java)
     if (possibleBody.isEmpty()) {
         return null
     }
@@ -76,6 +76,6 @@ fun PsiFile.findMethodsWithContent(content: String): List<String> =
         val contentPsiFile = factory.createFileFromText("Content.kt", KotlinFileType.INSTANCE, content)
         val formattingContent = contentPsiFile.formatting() ?: ""
 
-        val methods = extractElementsOfTypes(listOf(KtNamedFunction::class.java))
+        val methods = extractElementsOfTypes(KtNamedFunction::class.java)
         methods.filter { it.getBlockBody() == formattingContent }.mapNotNull { it.name }.toList()
     }
