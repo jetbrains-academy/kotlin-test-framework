@@ -91,7 +91,10 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
         val content = "return y * y"
-        assertThrows(IllegalArgumentException::class.java) { findMethodsWithContent(content) }
+        val methodName = "innerFunction"
+        assert(listOf(methodName).equals(findMethodsWithContent(content))) {
+            "The name of a method with this content \n $content \n must be $methodName"
+        }
     }
 
     fun testHasConstantWithGivenValue() {
@@ -125,6 +128,41 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         value = "2"
         assert(hasConstantWithGivenValue(value)) { "There must exist a constant with value $value" }
         assertFalse(hasConstantWithGivenValue("0.5"))
+    }
+
+    fun testFindMethodsWhereMethodIsCalled() {
+        val example = """
+            class ExampleClass {
+                fun outerFunction(x: Int): Int {
+                    fun innerFunction(y: Int): Int {
+                        return y * y
+                        method("Content")
+                    }
+            
+                    val squaredX = innerFunction(x)
+                    return squaredX + 10
+                }
+                
+                    fun method(message: String) {
+                        println(message)
+                    }
+                    
+                  fun method1(y: Int) {
+                            val actions = "Some actions"
+                        if (y > 5) {
+                            method("y is greater than 5")
+                        } else {
+                            method("y is less than 5")
+                        }
+                  }
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.kt", example)
+        val methodName = "method"
+        val methodsList = listOf("innerFunction", "method1", "method1")
+        assert(methodsList.equals(findMethodsWhereMethodIsCalled(methodName))) {
+            "Method $methodName should be called in methods: $methodsList"
+        }
     }
 
     fun testHasProperty() {

@@ -54,7 +54,6 @@ private fun KtNamedFunction.getBlockBody(): String? {
     if (possibleBody.isEmpty()) {
         return null
     }
-    require(possibleBody.size == 1) { "Parser error! A function must have only one body" }
     return possibleBody.first().text.trimBraces().trimIndent()
 }
 
@@ -79,6 +78,20 @@ fun PsiFile.findMethodsWithContent(content: String): List<String> =
 
         val methods = extractElementsOfTypes(KtNamedFunction::class.java)
         methods.filter { it.getBlockBody() == formattingContent }.mapNotNull { it.name }.toList()
+    }
+
+/**
+ * Finds all the methods in the file where a specific method is called.
+ *
+ * @param methodName The name of the method to search for its usages.
+ * @return A list of strings containing the names of methods where the specified method is called.
+ */
+fun PsiFile.findMethodsWhereMethodIsCalled(methodName: String): List<String> =
+    ApplicationManager.getApplication().runReadAction<List<String>> {
+        val referenceExpression = extractElementsOfTypes(KtReferenceExpression::class.java)
+        referenceExpression.filter { it.text == methodName }.mapNotNull {
+            it.parentsOfType(KtNamedFunction::class.java).first().name
+        }.toList()
     }
 
 /**
