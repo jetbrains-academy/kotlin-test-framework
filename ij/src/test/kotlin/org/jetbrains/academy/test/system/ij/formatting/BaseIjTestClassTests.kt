@@ -126,4 +126,91 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         assert(hasConstantWithGivenValue(value)) { "There must exist a constant with value $value" }
         assertFalse(hasConstantWithGivenValue("0.5"))
     }
+
+    fun testHasProperty() {
+        val example = """
+          private const val CONSTANT = "some text"
+             private val value = 0.5
+           val number: Int = 2
+           
+           fun method() {
+                println("Content")
+           }
+        """.trimIndent()
+        myFixture.configureByText("Task.kt", example)
+        var value = "CONSTANT"
+        assert(hasProperty(value)) { "There must exist a property with name $value" }
+        value = "value"
+        assert(hasProperty(value)) { "There must exist a property with name $value" }
+        value = "number"
+        assert(hasProperty(value)) { "There must exist a property with name $value" }
+        assertFalse(hasProperty("method"))
+        assertFalse(hasProperty("Content"))
+    }
+
+    fun testHasMethod() {
+        val example = """
+          private const val CONSTANT = "some text"
+            private val value = 0.5
+           
+           fun method() {
+                    val actions = "Some actions"
+                    println("Content")
+                    println(actions)
+                }
+                
+                fun notMethod() {
+                    val content = "Content"
+                    val actions = "Some actions"
+                    println(actions + content)
+                }
+                
+            fun value() {
+                println("Content")
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.kt", example)
+        var value = "method"
+        assert(hasMethod(value)) { "There must exist a method with name $value" }
+        value = "notMethod"
+        assert(hasMethod(value)) { "There must exist a method with name $value" }
+        value = "value"
+        assert(hasMethod(value)) { "There must exist a method with name $value" }
+        assertFalse(hasMethod("CONSTANT"))
+        assertFalse(hasMethod("Content"))
+    }
+
+    fun testHasExpressionWithParent() {
+        val example = """
+          private const val CONSTANT = Int.MAX_VALUE
+            
+          public fun calculateAveragePrice(productPrice: List<Int>): Int? {
+              return try {
+                  productPrice.sum() / productPrice.count()
+              } catch (error: Exception) {
+                  PrintWriter(File("Exception.txt"), Charsets.UTF_8).use { it.print(error.toString()) }
+                  null
+              }
+          }
+        """.trimIndent()
+        myFixture.configureByText("Task.kt", example)
+        var expression = "productPrice.sum()"
+        var parent = "productPrice.sum() / productPrice.count()"
+        assert(hasExpressionWithParent(expression, parent)) {
+            "There must exist a expression $expression with parent $parent"
+        }
+        expression = "File(\"Exception.txt\")"
+        parent = "File(\"Exception.txt\")"
+        assert(hasExpressionWithParent(expression, parent)) {
+            "There must exist a expression $expression with parent $parent"
+        }
+        expression = "PrintWriter(File(\"Exception.txt\"), Charsets.UTF_8).use { it.print(error.toString()) }"
+        parent = "calculateAveragePrice"
+        assert(hasExpressionWithParent(expression, parent, true)) {
+            "There must exist a expression $expression with parent $parent"
+        }
+        expression = "Int.MAX_VALUE"
+        parent = "val CONSTANT = Int.MAX_VALUE"
+        assertFalse(hasExpressionWithParent(expression, parent))
+    }
 }
