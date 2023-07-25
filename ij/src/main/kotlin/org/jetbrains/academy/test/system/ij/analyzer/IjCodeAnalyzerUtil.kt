@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.parentsOfType
 import org.jetbrains.academy.test.system.ij.formatting.formatting
 import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.psi.*
@@ -78,4 +79,58 @@ fun PsiFile.findMethodsWithContent(content: String): List<String> =
 
         val methods = extractElementsOfTypes(KtNamedFunction::class.java)
         methods.filter { it.getBlockBody() == formattingContent }.mapNotNull { it.name }.toList()
+    }
+
+/**
+ * Checks if the PsiFile contains a property with the specified property name.
+ *
+ * @param propertyName The name of the property to search for.
+ * @return True if the PsiFile contains a property with the given name, false otherwise.
+ */
+fun PsiFile.hasProperty(propertyName: String): Boolean = ApplicationManager.getApplication().runReadAction<Boolean> {
+    val elements = extractElementsOfTypes(KtProperty::class.java)
+    elements.any { it.name == propertyName }
+}
+
+/**
+ * Checks if the PsiFile contains a method with the specified method name.
+ *
+ * @param methodName The name of the method to search for.
+ * @return True if the PsiFile contains a method with the given name, false otherwise.
+ */
+fun PsiFile.hasMethod(methodName: String): Boolean = ApplicationManager.getApplication().runReadAction<Boolean> {
+    val elements = extractElementsOfTypes(KtNamedFunction::class.java)
+    elements.any { it.name == methodName }
+}
+
+/**
+ * Retrieves the text of the parent element of the given PsiElement.
+ *
+ * @param element The PsiElement for which to find the parent.
+ * @param isParentTypeFunction If true, the parent element is expected to be a function (KtNamedFunction).
+ *                            If false, the parent element is expected to be a class or any other non-function type.
+ * @return The text of the parent element if found, or "no name" if the parent is not found or has no name (for functions).
+ */
+private fun getParent(element: PsiElement, isParentTypeFunction: Boolean): String {
+    return if (isParentTypeFunction) {
+        element.parentsOfType(KtNamedFunction::class.java).first().name ?: "no name"
+    } else {
+        element.parent.text
+    }
+}
+
+/**
+ * Checks if the PsiFile contains an expression with the specified text that has a specific parent element.
+ *
+ * @param expression The text of the expression to search for.
+ * @param parent The text of the parent element to check against.
+ * @param isParentTypeFunction If true, the parent element is expected to be a function (KtNamedFunction).
+ *                            If false, the parent element is expected to be a class or any other non-function type.
+ * @return True if the PsiFile contains an expression with the given text and the specified parent, false otherwise.
+ */
+fun PsiFile.hasExpressionWithParent(expression: String, parent: String, isParentTypeFunction: Boolean): Boolean =
+    ApplicationManager.getApplication().runReadAction<Boolean> {
+        val expressions: MutableCollection<PsiElement> =
+            extractElementsOfTypes(KtDotQualifiedExpression::class.java, KtCallExpression::class.java)
+        expressions.any { it.text == expression && getParent(it, isParentTypeFunction) == parent }
     }
