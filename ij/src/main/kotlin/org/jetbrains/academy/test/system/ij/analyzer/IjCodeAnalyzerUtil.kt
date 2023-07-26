@@ -88,8 +88,7 @@ fun PsiFile.findMethodsWithContent(content: String): List<String> =
  * @return True if the PsiFile contains a property with the given name, false otherwise.
  */
 fun PsiFile.hasProperty(propertyName: String): Boolean = ApplicationManager.getApplication().runReadAction<Boolean> {
-    val elements = extractElementsOfTypes(KtProperty::class.java)
-    elements.any { it.name == propertyName }
+    extractElementsOfTypes(KtProperty::class.java).any { it.name == propertyName }
 }
 
 /**
@@ -99,8 +98,7 @@ fun PsiFile.hasProperty(propertyName: String): Boolean = ApplicationManager.getA
  * @return True if the PsiFile contains a method with the given name, false otherwise.
  */
 fun PsiFile.hasMethod(methodName: String): Boolean = ApplicationManager.getApplication().runReadAction<Boolean> {
-    val elements = extractElementsOfTypes(KtNamedFunction::class.java)
-    elements.any { it.name == methodName }
+    extractElementsOfTypes(KtNamedFunction::class.java).any { it.name == methodName }
 }
 
 /**
