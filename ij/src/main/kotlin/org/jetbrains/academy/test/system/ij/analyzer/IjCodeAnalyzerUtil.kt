@@ -86,9 +86,9 @@ fun PsiFile.findMethodsWithContent(content: String): List<String> =
  * @param methodName The name of the method to search for its usages.
  * @return A list of strings containing the names of methods where the specified method is called.
  */
-fun PsiFile.findMethodsWhereMethodIsCalled(methodName: String): List<String> =
+fun PsiFile.findMethodUsages(methodName: String): List<String> =
     ApplicationManager.getApplication().runReadAction<List<String>> {
-        val referenceExpression = extractElementsOfTypes(KtReferenceExpression::class.java)
+        val referenceExpression = extractElementsOfTypes(KtCallExpression::class.java)
         referenceExpression.filter { it.text == methodName }.mapNotNull {
             it.parentsOfType(KtNamedFunction::class.java).first().name
         }.toList()

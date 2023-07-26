@@ -1,7 +1,7 @@
 package org.jetbrains.academy.test.system.test
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.jetbrains.academy.test.system.ij.analyzer.findMethodsWhereMethodIsCalled
+import org.jetbrains.academy.test.system.ij.analyzer.findMethodUsages
 import org.jetbrains.academy.test.system.ij.analyzer.findMethodsWithContent
 import org.jetbrains.academy.test.system.ij.analyzer.hasConstantWithGivenValue
 import org.jetbrains.academy.test.system.ij.analyzer.hasMethod
@@ -20,8 +20,7 @@ open class BaseIjTestClass : BasePlatformTestCase() {
     fun findMethodsWithContent(content: String): List<String> =
         myFixture.file.findMethodsWithContent(content)
 
-    fun findMethodsWhereMethodIsCalled(content: String): List<String> =
-        myFixture.file.findMethodsWhereMethodIsCalled(content)
+    fun findMethodUsages(content: String): List<String> = myFixture.file.findMethodUsages(content)
 
     fun hasProperty(propertyName: String): Boolean = myFixture.file.hasProperty(propertyName)
 

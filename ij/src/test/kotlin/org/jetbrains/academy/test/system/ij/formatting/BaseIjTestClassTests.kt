@@ -130,7 +130,7 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         assertFalse(hasConstantWithGivenValue("0.5"))
     }
 
-    fun testFindMethodsWhereMethodIsCalled() {
+    fun testFindMethodUsages() {
         val example = """
             class ExampleClass {
                 fun outerFunction(x: Int): Int {
@@ -158,9 +158,19 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             }
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
-        val methodName = "method"
-        val methodsList = listOf("innerFunction", "method1", "method1")
-        assert(methodsList.equals(findMethodsWhereMethodIsCalled(methodName))) {
+        var methodName = "method(\"Content\")"
+        var methodsList = listOf("innerFunction")
+        assert(methodsList.equals(findMethodUsages(methodName))) {
+            "Method $methodName should be called in methods: $methodsList"
+        }
+        methodName = "method(\"y is greater than 5\")"
+        methodsList = listOf("method1")
+        assert(methodsList.equals(findMethodUsages(methodName))) {
+            "Method $methodName should be called in methods: $methodsList"
+        }
+        methodName = "method(\"y is less than 5\")"
+        methodsList = listOf("method1")
+        assert(methodsList.equals(findMethodUsages(methodName))) {
             "Method $methodName should be called in methods: $methodsList"
         }
     }
