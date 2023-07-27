@@ -194,8 +194,8 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             }
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
-        var expression = "productPrice.sum()"
-        var parent = "productPrice.sum() / productPrice.count()"
+        var expression: String = "productPrice.sum()"
+        var parent: String? = "productPrice.sum() / productPrice.count()"
         assert(hasExpressionWithParent(expression, parent)) {
             "There must exist an expression $expression with parent $parent"
         }
@@ -212,5 +212,10 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         expression = "Int.MAX_VALUE"
         parent = "val CONSTANT = Int.MAX_VALUE"
         assertFalse(hasExpressionWithParent(expression, parent))
+        expression = "Int.MAX_VALUE"
+        parent = null
+        assert(hasExpressionWithParent(expression, parent, true)) {
+            "There must exist an expression $expression with parent $parent"
+        }
     }
 }
