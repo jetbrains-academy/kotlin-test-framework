@@ -143,23 +143,28 @@ class BaseIjTestClassTests : BaseIjTestClass() {
                     return squaredX + 10
                 }
                 
-                    fun method(message: String) {
-                        println(message)
-                    }
+                fun method(message: String) {
+                    println(message)
+                }
                     
-                  fun method1(y: Int) {
-                            val actions = "Some actions"
-                        if (y > 5) {
-                            method("y is greater than 5")
-                        } else {
-                            method("y is less than 5")
-                        }
-                  }
+                fun method1(y: Int) {
+                    val actions = "Some actions"
+                    if (y > 5) {
+                        method("y is greater than 5")
+                    } else {
+                        method("y is less than 5")
+                    }
+                }
+                
+                fun method2() {
+                    method("Content")
+                    println("Content")
+                }
             }
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
         var methodName = "method(\"Content\")"
-        var methodsList = listOf("innerFunction")
+        var methodsList = listOf("innerFunction", "method2")
         assert(methodsList.equals(findMethodUsages(methodName))) {
             "Method $methodName should be called in methods: $methodsList"
         }
@@ -172,6 +177,11 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         methodsList = listOf("method1")
         assert(methodsList.equals(findMethodUsages(methodName))) {
             "Method $methodName should be called in methods: $methodsList"
+        }
+        methodName = "method(content)"
+        methodsList = listOf()
+        assert(methodsList.equals(findMethodUsages(methodName))) {
+            "Method $methodName should not be called"
         }
     }
 

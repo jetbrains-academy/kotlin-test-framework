@@ -90,7 +90,7 @@ fun PsiFile.findMethodUsages(methodName: String): List<String> =
     ApplicationManager.getApplication().runReadAction<List<String>> {
         val callExpression = extractElementsOfTypes(KtCallExpression::class.java)
         callExpression.filter { it.text == methodName }.mapNotNull {
-            it.parentsOfType(KtNamedFunction::class.java).first().name
+            it.parentsOfType(KtNamedFunction::class.java).firstOrNull()?.name
         }.toList()
     }
 
