@@ -109,11 +109,11 @@ fun PsiFile.hasMethod(methodName: String): Boolean = ApplicationManager.getAppli
  *                            If false, the parent element is expected to be a class or any other non-function type.
  * @return The text of the parent element if found, or "no name" if the parent is not found or has no name (for functions).
  */
-private fun getParent(element: PsiElement, isParentTypeFunction: Boolean): String {
+private fun getParentText(element: PsiElement, isParentTypeFunction: Boolean): String? {
     return if (isParentTypeFunction) {
-        element.parentsOfType(KtNamedFunction::class.java).first().name ?: "no name"
+        element.parentsOfType(KtNamedFunction::class.java).firstOrNull()?.name
     } else {
-        element.parent.text
+        element.parent?.text
     }
 }
 
@@ -130,5 +130,5 @@ fun PsiFile.hasExpressionWithParent(expression: String, parent: String, isParent
     ApplicationManager.getApplication().runReadAction<Boolean> {
         val expressions: MutableCollection<PsiElement> =
             extractElementsOfTypes(KtDotQualifiedExpression::class.java, KtCallExpression::class.java)
-        expressions.any { it.text == expression && getParent(it, isParentTypeFunction) == parent }
+        expressions.any { it.text == expression && getParentText(it, isParentTypeFunction) == parent }
     }
