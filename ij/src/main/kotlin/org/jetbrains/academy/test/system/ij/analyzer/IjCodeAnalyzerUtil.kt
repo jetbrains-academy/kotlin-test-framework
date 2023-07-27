@@ -88,8 +88,8 @@ fun PsiFile.findMethodsWithContent(content: String): List<String> =
  */
 fun PsiFile.findMethodUsages(methodName: String): List<String> =
     ApplicationManager.getApplication().runReadAction<List<String>> {
-        val referenceExpression = extractElementsOfTypes(KtCallExpression::class.java)
-        referenceExpression.filter { it.text == methodName }.mapNotNull {
+        val callExpression = extractElementsOfTypes(KtCallExpression::class.java)
+        callExpression.filter { it.text == methodName }.mapNotNull {
             it.parentsOfType(KtNamedFunction::class.java).first().name
         }.toList()
     }
