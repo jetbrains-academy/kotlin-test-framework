@@ -126,7 +126,7 @@ private fun getParentText(element: PsiElement, isParentTypeFunction: Boolean): S
  *                            If false, the parent element is expected to be a class or any other non-function type.
  * @return True if the PsiFile contains an expression with the given text and the specified parent, false otherwise.
  */
-fun PsiFile.hasExpressionWithParent(expression: String, parent: String, isParentTypeFunction: Boolean): Boolean =
+fun PsiFile.hasExpressionWithParent(expression: String, parent: String?, isParentTypeFunction: Boolean): Boolean =
     ApplicationManager.getApplication().runReadAction<Boolean> {
         val expressions: MutableCollection<PsiElement> =
             extractElementsOfTypes(KtDotQualifiedExpression::class.java, KtCallExpression::class.java)

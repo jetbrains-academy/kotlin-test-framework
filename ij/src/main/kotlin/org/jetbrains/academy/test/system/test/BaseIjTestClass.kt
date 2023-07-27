@@ -23,6 +23,6 @@ open class BaseIjTestClass : BasePlatformTestCase() {
 
     fun hasMethod(methodName: String): Boolean = myFixture.file.hasMethod(methodName)
 
-    fun hasExpressionWithParent(expression: String, parent: String, isParentTypeFunction: Boolean = false): Boolean =
+    fun hasExpressionWithParent(expression: String, parent: String?, isParentTypeFunction: Boolean = false): Boolean =
         myFixture.file.hasExpressionWithParent(expression, parent, isParentTypeFunction)
 }
