@@ -91,7 +91,10 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
         val content = "return y * y"
-        assertThrows(IllegalArgumentException::class.java) { findMethodsWithContent(content) }
+        val methodName = "innerFunction"
+        assert(listOf(methodName).equals(findMethodsWithContent(content))) {
+            "The name of a method with this content \n $content \n must be $methodName"
+        }
     }
 
     fun testHasConstantWithGivenValue() {
@@ -125,6 +128,61 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         value = "2"
         assert(hasConstantWithGivenValue(value)) { "There must exist a constant with value $value" }
         assertFalse(hasConstantWithGivenValue("0.5"))
+    }
+
+    fun testFindMethodUsages() {
+        val example = """
+            class ExampleClass {
+                fun outerFunction(x: Int): Int {
+                    fun innerFunction(y: Int): Int {
+                        return y * y
+                        method("Content")
+                    }
+            
+                    val squaredX = innerFunction(x)
+                    return squaredX + 10
+                }
+                
+                fun method(message: String) {
+                    println(message)
+                }
+                    
+                fun method1(y: Int) {
+                    val actions = "Some actions"
+                    if (y > 5) {
+                        method("y is greater than 5")
+                    } else {
+                        method("y is less than 5")
+                    }
+                }
+                
+                fun method2() {
+                    method("Content")
+                    println("Content")
+                }
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.kt", example)
+        var methodName = "method(\"Content\")"
+        var methodsList = listOf("innerFunction", "method2")
+        assert(methodsList.equals(findMethodUsages(methodName))) {
+            "Method $methodName should be called in methods: $methodsList"
+        }
+        methodName = "method(\"y is greater than 5\")"
+        methodsList = listOf("method1")
+        assert(methodsList.equals(findMethodUsages(methodName))) {
+            "Method $methodName should be called in methods: $methodsList"
+        }
+        methodName = "method(\"y is less than 5\")"
+        methodsList = listOf("method1")
+        assert(methodsList.equals(findMethodUsages(methodName))) {
+            "Method $methodName should be called in methods: $methodsList"
+        }
+        methodName = "method(content)"
+        methodsList = listOf()
+        assert(methodsList.equals(findMethodUsages(methodName))) {
+            "Method $methodName should not be called"
+        }
     }
 
     fun testHasProperty() {
