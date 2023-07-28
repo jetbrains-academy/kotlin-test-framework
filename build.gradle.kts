@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.jetbrains.academy.test.system"
-version = "2.0.4"
+version = "2.0.5"
 
 allprojects {
     apply {
