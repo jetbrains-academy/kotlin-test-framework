@@ -1,4 +1,4 @@
-package org.jetbrains.academy.test.kotlin.ij.analyzer
+package org.jetbrains.academy.test.system.kotlin.ij.analyzer
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.psi.PsiElement

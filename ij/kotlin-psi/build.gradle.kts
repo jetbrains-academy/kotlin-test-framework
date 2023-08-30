@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":ij:core"))
+    implementation(project(":ij:common"))
 }
 
 fun properties(key: String) = providers.gradleProperty(key)

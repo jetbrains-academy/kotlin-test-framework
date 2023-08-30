@@ -1,4 +1,4 @@
-package org.jetbrains.academy.test.system.ij.kotlin
+package org.jetbrains.academy.test.system.kotlin.ij
 
 import org.jetbrains.academy.test.system.ij.formatting.checkIfFormattingRulesWereApplied
 

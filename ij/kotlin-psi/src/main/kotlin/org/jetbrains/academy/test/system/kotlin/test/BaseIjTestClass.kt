@@ -1,12 +1,12 @@
-package org.jetbrains.academy.test.kotlin.test
+package org.jetbrains.academy.test.system.kotlin.test
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.jetbrains.academy.test.kotlin.ij.analyzer.findMethodUsages
-import org.jetbrains.academy.test.kotlin.ij.analyzer.findMethodsWithContent
-import org.jetbrains.academy.test.kotlin.ij.analyzer.hasConstantWithGivenValue
-import org.jetbrains.academy.test.kotlin.ij.analyzer.hasMethod
-import org.jetbrains.academy.test.kotlin.ij.analyzer.hasProperty
-import org.jetbrains.academy.test.kotlin.ij.analyzer.hasExpressionWithParent
+import org.jetbrains.academy.test.system.kotlin.ij.analyzer.findMethodUsages
+import org.jetbrains.academy.test.system.kotlin.ij.analyzer.findMethodsWithContent
+import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasConstantWithGivenValue
+import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasMethod
+import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasProperty
+import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasExpressionWithParent
 
 
 /**

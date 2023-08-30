@@ -1,7 +1,7 @@
-package org.jetbrains.academy.test.system.ij.kotlin
+package org.jetbrains.academy.test.system.kotlin.ij
 
 import org.junit.jupiter.api.Assertions
-import org.jetbrains.academy.test.kotlin.test.BaseIjTestClass
+import org.jetbrains.academy.test.system.kotlin.test.BaseIjTestClass
 
 class BaseIjTestClassTests : BaseIjTestClass() {
 
