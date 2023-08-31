@@ -72,10 +72,14 @@ val spaceUsername = getLocalProperty("spaceUsername")
 val spacePassword = getLocalProperty("spacePassword")
 
 configure(subprojects) {
-    apply(plugin = "maven-publish")
-
     val subprojectName = this.name
 
+    // We don't need to publish the root ij project
+    if (subprojectName == "ij") {
+        return@configure
+    }
+
+    apply(plugin = "maven-publish")
     publishing {
         publications {
             register<MavenPublication>("maven") {
