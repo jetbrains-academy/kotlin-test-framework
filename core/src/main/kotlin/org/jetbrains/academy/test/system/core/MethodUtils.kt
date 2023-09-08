@@ -47,10 +47,8 @@ fun Array<Method>.findMethod(method: TestMethod, customErrorMessage: String? = n
         }
     val filteredByArgumentsCount =
         filteredByType.filterByCondition(customErrorMessage ?: "The method ${method.name} should have ${method.arguments.size} arguments") { it.parameterCount == method.arguments.size }
-    require(filteredByArgumentsCount.size == 1) { customErrorMessage ?: "The method ${method.prettyString()} is missed. Check it's arguments properly." }
-    val m = filteredByArgumentsCount.first()
-    val params = m.parameterTypes.map { it.name.getShortName().lowercase() }
     val args = method.arguments.map { it.javaType.lowercase() }
-    assert(params == args) { customErrorMessage ?: "The method ${method.name} should have ${method.arguments.size} arguments: $params. The full signature is: ${method.prettyString()}." }
-    return m
+    val methods = filteredByArgumentsCount.filterByCondition(customErrorMessage ?: "The method ${method.prettyString()} is missed. Check it's arguments properly." ) { m -> m.parameterTypes.map { it.name.getShortName().lowercase() } == args }
+    require(methods.size == 1) { customErrorMessage ?: "The method ${method.name} should have ${method.arguments.size} arguments: $args. The full signature is: ${method.prettyString()}." }
+    return methods.first()
 }
