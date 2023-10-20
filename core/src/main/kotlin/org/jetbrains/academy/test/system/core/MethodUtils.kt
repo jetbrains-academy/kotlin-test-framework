@@ -40,10 +40,10 @@ fun Array<Method>.findMethod(method: TestMethod, customErrorMessage: String? = n
                 it.name == method.name
             }
         }
-    val returnTypeJava = method.returnTypeJava ?: method.returnType.type
+    val returnTypeJava = (method.returnTypeJava?.let { listOf(it) } ?: listOfNotNull(method.returnType.type, *method.returnType.possibleBounds.toTypedArray())).map { it.lowercase() }
     val filteredByType =
         filteredByName.filterByCondition(customErrorMessage ?: "The method ${method.name} should have the return type ${method.returnType.getTypePrettyString()}") {
-            it.returnType.name.getShortName().lowercase() == returnTypeJava.lowercase()
+            it.returnType.name.getShortName().lowercase() in returnTypeJava
         }
     val filteredByArgumentsCount =
         filteredByType.filterByCondition(customErrorMessage ?: "The method ${method.name} should have ${method.arguments.size} arguments") { it.parameterCount == method.arguments.size }
