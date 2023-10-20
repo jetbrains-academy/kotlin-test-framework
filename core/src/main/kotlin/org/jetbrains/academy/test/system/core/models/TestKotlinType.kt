@@ -40,6 +40,7 @@ data class TestKotlinType(
     val abbreviation: String? = null,
     val isNullable: Boolean = false,
     val params: List<String> = emptyList(),
+    val possibleBounds: List<String> = emptyList(),
 ) {
     fun getTypePrettyString() = abbreviation ?: run {
         if (params.isNotEmpty()) {
