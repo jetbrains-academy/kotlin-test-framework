@@ -1,6 +1,7 @@
 package org.jetbrains.academy.test.system.ij.formatting
 
 import org.jetbrains.academy.test.system.test.BaseIjTestClass
+import org.junit.jupiter.api.Assertions
 
 class BaseIjTestClassTests : BaseIjTestClass() {
 
@@ -32,9 +33,11 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             println(actions)
         """.trimIndent()
         val methodName = "method1"
-        assert(listOf(methodName).equals(findMethodsWithContent(content))) {
+        Assertions.assertEquals(
+            listOf(methodName),
+            findMethodsWithContent(content),
             "The name of a method with this content \n $content \n must be $methodName"
-        }
+        )
     }
 
     fun testFindMethodsWithSingleLineContent() {
@@ -46,9 +49,11 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         myFixture.configureByText("Task.kt", example)
         val content = """"Some actions"""".trimIndent()
         val methodName = "method"
-        assert(listOf(methodName).equals(findMethodsWithContent(content))) {
+        Assertions.assertEquals(
+            listOf(methodName),
+            findMethodsWithContent(content),
             "The name of a method with this content \n $content \n must be $methodName"
-        }
+        )
     }
 
     fun testFindMethodsWithContentWithBrokenFormatting() {
@@ -73,9 +78,11 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             println(actions)
         """.trimIndent()
         val methodName = "method1"
-        assert(listOf(methodName).equals(findMethodsWithContent(content))) {
+        Assertions.assertEquals(
+            listOf(methodName),
+            findMethodsWithContent(content),
             "The name of a method with this content \n $content \n must be $methodName"
-        }
+        )
     }
 
     fun testFindMethodsWithContentWithNestedBodies() {
@@ -92,9 +99,11 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         myFixture.configureByText("Task.kt", example)
         val content = "return y * y"
         val methodName = "innerFunction"
-        assert(listOf(methodName).equals(findMethodsWithContent(content))) {
+        Assertions.assertEquals(
+            listOf(methodName),
+            findMethodsWithContent(content),
             "The name of a method with this content \n $content \n must be $methodName"
-        }
+        )
     }
 
     fun testHasConstantWithGivenValue() {
@@ -107,13 +116,13 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
         var value = "\"some text\""
-        assert(hasConstantWithGivenValue(value)) { "There must exist a constant with value $value" }
+        Assertions.assertTrue(hasConstantWithGivenValue(value), "There must exist a constant with value $value")
         value = "2"
-        assert(hasConstantWithGivenValue(value)) { "There must exist a constant with value $value" }
+        Assertions.assertTrue(hasConstantWithGivenValue(value), "There must exist a constant with value $value")
         value = "50"
-        assert(hasConstantWithGivenValue(value)) { "There must exist a constant with value $value" }
-        assertFalse(hasConstantWithGivenValue("0.5"))
-        assertFalse(hasConstantWithGivenValue("500"))
+        Assertions.assertTrue(hasConstantWithGivenValue(value), "There must exist a constant with value $value")
+        Assertions.assertFalse(hasConstantWithGivenValue("0.5"))
+        Assertions.assertFalse(hasConstantWithGivenValue("500"))
     }
 
     fun testHasConstantWithGivenValueWithBrokenFormatting() {
@@ -124,10 +133,10 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
         var value = "\"some text\""
-        assert(hasConstantWithGivenValue(value)) { "There must exist a constant with value $value" }
+        Assertions.assertTrue(hasConstantWithGivenValue(value), "There must exist a constant with value $value")
         value = "2"
-        assert(hasConstantWithGivenValue(value)) { "There must exist a constant with value $value" }
-        assertFalse(hasConstantWithGivenValue("0.5"))
+        Assertions.assertTrue(hasConstantWithGivenValue(value), "There must exist a constant with value $value")
+        Assertions.assertFalse(hasConstantWithGivenValue("0.5"))
     }
 
     fun testFindMethodUsages() {
@@ -165,24 +174,28 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         myFixture.configureByText("Task.kt", example)
         var methodName = "method(\"Content\")"
         var methodsList = listOf("innerFunction", "method2")
-        assert(methodsList.equals(findMethodUsages(methodName))) {
+        Assertions.assertEquals(
+            methodsList,
+            findMethodUsages(methodName),
             "Method $methodName should be called in methods: $methodsList"
-        }
+        )
         methodName = "method(\"y is greater than 5\")"
         methodsList = listOf("method1")
-        assert(methodsList.equals(findMethodUsages(methodName))) {
+        Assertions.assertEquals(
+            methodsList,
+            findMethodUsages(methodName),
             "Method $methodName should be called in methods: $methodsList"
-        }
+        )
         methodName = "method(\"y is less than 5\")"
         methodsList = listOf("method1")
-        assert(methodsList.equals(findMethodUsages(methodName))) {
+        Assertions.assertEquals(
+            methodsList,
+            findMethodUsages(methodName),
             "Method $methodName should be called in methods: $methodsList"
-        }
+        )
         methodName = "method(content)"
         methodsList = listOf()
-        assert(methodsList.equals(findMethodUsages(methodName))) {
-            "Method $methodName should not be called"
-        }
+        Assertions.assertEquals(methodsList, findMethodUsages(methodName), "Method $methodName should not be called")
     }
 
     fun testHasProperty() {
@@ -197,13 +210,13 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
         var value = "CONSTANT"
-        assert(hasProperty(value)) { "There must exist a property with name $value" }
+        Assertions.assertTrue(hasProperty(value), "There must exist a property with name $value")
         value = "value"
-        assert(hasProperty(value)) { "There must exist a property with name $value" }
+        Assertions.assertTrue(hasProperty(value), "There must exist a property with name $value")
         value = "number"
-        assert(hasProperty(value)) { "There must exist a property with name $value" }
-        assertFalse(hasProperty("method"))
-        assertFalse(hasProperty("Content"))
+        Assertions.assertTrue(hasProperty(value), "There must exist a property with name $value")
+        Assertions.assertFalse(hasProperty("method"))
+        Assertions.assertFalse(hasProperty("Content"))
     }
 
     fun testHasMethod() {
@@ -229,13 +242,13 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
         var value = "method"
-        assert(hasMethod(value)) { "There must exist a method with name $value" }
+        Assertions.assertTrue(hasMethod(value), "There must exist a method with name $value")
         value = "notMethod"
-        assert(hasMethod(value)) { "There must exist a method with name $value" }
+        Assertions.assertTrue(hasMethod(value), "There must exist a method with name $value")
         value = "value"
-        assert(hasMethod(value)) { "There must exist a method with name $value" }
-        assertFalse(hasMethod("CONSTANT"))
-        assertFalse(hasMethod("Content"))
+        Assertions.assertTrue(hasMethod(value), "There must exist a method with name $value")
+        Assertions.assertFalse(hasMethod("CONSTANT"))
+        Assertions.assertFalse(hasMethod("Content"))
     }
 
     fun testHasExpressionWithParent() {
@@ -254,26 +267,30 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         myFixture.configureByText("Task.kt", example)
         var expression: String = "productPrice.sum()"
         var parent: String? = "productPrice.sum() / productPrice.count()"
-        assert(hasExpressionWithParent(expression, parent)) {
+        Assertions.assertTrue(
+            hasExpressionWithParent(expression, parent),
             "There must exist an expression $expression with parent $parent"
-        }
+        )
         expression = "File(\"Exception.txt\")"
         parent = "File(\"Exception.txt\")"
-        assert(hasExpressionWithParent(expression, parent)) {
+        Assertions.assertTrue(
+            hasExpressionWithParent(expression, parent),
             "There must exist an expression $expression with parent $parent"
-        }
+        )
         expression = "PrintWriter(File(\"Exception.txt\"), Charsets.UTF_8).use { it.print(error.toString()) }"
         parent = "calculateAveragePrice"
-        assert(hasExpressionWithParent(expression, parent, true)) {
+        Assertions.assertTrue(
+            hasExpressionWithParent(expression, parent, true),
             "There must exist an expression $expression with parent $parent"
-        }
+        )
         expression = "Int.MAX_VALUE"
         parent = "val CONSTANT = Int.MAX_VALUE"
-        assertFalse(hasExpressionWithParent(expression, parent))
+        Assertions.assertFalse(hasExpressionWithParent(expression, parent))
         expression = "Int.MAX_VALUE"
         parent = null
-        assert(hasExpressionWithParent(expression, parent, true)) {
+        Assertions.assertTrue(
+            hasExpressionWithParent(expression, parent, true),
             "There must exist an expression $expression with parent $parent"
-        }
+        )
     }
 }

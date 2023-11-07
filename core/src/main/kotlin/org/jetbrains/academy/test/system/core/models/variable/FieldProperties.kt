@@ -4,6 +4,7 @@ import org.jetbrains.academy.test.system.core.getShortName
 import org.jetbrains.academy.test.system.core.models.Visibility
 import org.jetbrains.academy.test.system.core.models.asVisibility
 import org.jetbrains.academy.test.system.core.models.getVisibility
+import org.junit.jupiter.api.Assertions
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import kotlin.reflect.KProperty
@@ -46,17 +47,21 @@ internal data class FieldProperties(
     }
 
     fun checkProperties(variable: TestVariable, toCheckMutability: Boolean) {
-        assert(name == variable.name) { "The field name must be: ${variable.name}" }
+        Assertions.assertEquals(name, variable.name, "The field name must be: ${variable.name}")
         val visibilityErrorMessage = variable.visibility?.let {
             "The visibility of the field ${variable.name} must be ${it.key}"
         } ?: "The filed ${variable.name} should not have any modifiers"
-        assert(visibility?.key?.lowercase() == variable.visibility?.key) { visibilityErrorMessage }
+        Assertions.assertEquals(visibility?.key?.lowercase(), variable.visibility?.key, visibilityErrorMessage)
         if (toCheckMutability) {
             val mutabilityErrorMessage = variable.mutability?.let {
                 "The field ${variable.name} must be ${it.key}"
             } ?: "The filed ${variable.name} should not have val or var key words"
-            assert(mutability.compareWith(variable.mutability)) { mutabilityErrorMessage }
+            Assertions.assertTrue(mutability.compareWith(variable.mutability), mutabilityErrorMessage)
         }
-        assert(javaType == variable.javaType.lowercase()) { "The return type of the field ${variable.name} must be ${variable.javaType.lowercase()}" }
+        Assertions.assertEquals(
+            javaType,
+            variable.javaType.lowercase(),
+            "The return type of the field ${variable.name} must be ${variable.javaType.lowercase()}"
+        )
     }
 }

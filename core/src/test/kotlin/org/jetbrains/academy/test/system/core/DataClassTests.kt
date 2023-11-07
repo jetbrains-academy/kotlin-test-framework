@@ -5,6 +5,7 @@ import org.jetbrains.academy.test.system.core.models.classes.ConstructorGetter
 import org.jetbrains.academy.test.system.core.models.method.TestMethod
 import org.jetbrains.academy.test.system.core.models.method.TestMethodInvokeData
 import org.jetbrains.academy.test.system.core.testData.dataClass.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -46,7 +47,11 @@ class DataClassTests {
             val instance = constructor.newInstance(publicVal, "aliasToString", 5)
             val publicValGetterMethod = clazz.methods.findMethod(publicValGetterMethod)
             val publicValActual = dataClassTestClass.invokeMethodWithoutArgs(clazz, instance, publicValGetterMethod)
-            assert(publicVal == publicValActual.toString()) { "The instance of the class ${dataClassTestClass.name} must have value $publicVal in the publicVal field if it was passed into the constructor" }
+            Assertions.assertEquals(
+                publicVal,
+                publicValActual.toString(),
+                "The instance of the class ${dataClassTestClass.name} must have value $publicVal in the publicVal field if it was passed into the constructor"
+            )
         }
     }
 
@@ -69,7 +74,11 @@ class DataClassTests {
             invokeData = invokeData,
             isPrivate = sumMethod.visibility == Visibility.PRIVATE
         ).toString()
-        assert(expected.toString() == actualSum) { "For a = $a and b = $b the method ${sumMethod.name} must return $expected." }
+        Assertions.assertEquals(
+            expected.toString(),
+            actualSum,
+            "For a = $a and b = $b the method ${sumMethod.name} must return $expected."
+        )
     }
 
     private fun TestMethod.getInvokeData() = TestMethodInvokeData(
@@ -85,7 +94,7 @@ class DataClassTests {
             invokeData = invokeData,
             isPrivate = constMethod.visibility == Visibility.PRIVATE
         ).toString()
-        assert("5" == actualConst) { "The method ${constMethod.name} must return 5." }
+        Assertions.assertEquals("5", actualConst, "The method ${constMethod.name} must return 5.")
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.codeStyle.CodeStyleManager
 import org.jetbrains.academy.test.system.inspections.applyInspections
 import org.jetbrains.kotlin.idea.inspections.KotlinUnusedImportInspection
+import org.junit.jupiter.api.Assertions
 
 // TODO: make it possible to check different aspects of formatting
 fun PsiFile.checkIfFormattingRulesWereApplied() {
@@ -17,7 +18,11 @@ fun PsiFile.checkIfFormattingRulesWereApplied() {
         codeStyleManager.reformat(this)
     }
     val formattedCode = ApplicationManager.getApplication().runReadAction<String> { text }
-    assert(originalCode.trimIndent() == formattedCode.trimIndent()) { "The code after formatting should be:${System.lineSeparator()}$formattedCode${System.lineSeparator()}Please, apply code formatting refactoring to the code." }
+    Assertions.assertEquals(
+        originalCode.trimIndent(),
+        formattedCode.trimIndent(),
+        "The code after formatting should be:${System.lineSeparator()}$formattedCode${System.lineSeparator()}Please, apply code formatting refactoring to the code."
+    )
 }
 
 fun PsiFile.formatting(): String? {
@@ -29,7 +34,8 @@ fun PsiFile.formatting(): String? {
 }
 
 fun PsiFile.checkIfOptimizeImportsWereApplied() {
-    assert(applyInspections(listOf(KotlinUnusedImportInspection())).isEmpty()) {
+    Assertions.assertTrue(
+        applyInspections(listOf(KotlinUnusedImportInspection())).isEmpty(),
         "Please, apply \"Optimize import\" option when formatting code."
-    }
+    )
 }
