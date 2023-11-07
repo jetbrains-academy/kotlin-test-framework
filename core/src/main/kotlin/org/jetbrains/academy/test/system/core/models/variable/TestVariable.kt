@@ -6,6 +6,7 @@ import org.jetbrains.academy.test.system.core.checkType
 import org.jetbrains.academy.test.system.core.models.TestKotlinType
 import org.jetbrains.academy.test.system.core.models.Visibility
 import org.jetbrains.academy.test.system.core.throwInternalLibError
+import org.junit.jupiter.api.Assertions
 import java.io.File
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
@@ -55,13 +56,16 @@ data class TestVariable(
             )
         commonProp.checkProperties(this, toCheckMutability)
         if (isStatic) {
-            assert(Modifier.isStatic(field.modifiers)) { "The field $name must be defined into an object or a companion object." }
+            Assertions.assertTrue(
+                Modifier.isStatic(field.modifiers),
+                "The field $name must be defined into an object or a companion object."
+            )
         }
         if (isConst) {
             val errorMessage = "The field $name must be a const value."
-            assert(Modifier.isFinal(field.modifiers)) { errorMessage }
+            Assertions.assertTrue(Modifier.isFinal(field.modifiers), errorMessage)
             field.kotlinProperty?.isConst?.let {
-                assert(it) { errorMessage }
+                Assertions.assertTrue(it, errorMessage)
             }
         }
         field.kotlinProperty?.returnType?.checkType(
@@ -93,7 +97,7 @@ fun checkListOfVariables(sourceCodeFile: File, variables: List<TestVariable>) {
     if (sourceCodeFile.exists()) {
         val content = sourceCodeFile.readText()
         for (variable in variables) {
-            assert(variable.isVariableExist(content))
+            Assertions.assertTrue(variable.isVariableExist(content))
         }
     } else {
         // TODO: log some errors?

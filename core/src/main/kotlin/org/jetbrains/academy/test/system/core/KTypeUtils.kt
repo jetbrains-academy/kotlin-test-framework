@@ -1,6 +1,7 @@
 package org.jetbrains.academy.test.system.core
 
 import org.jetbrains.academy.test.system.core.models.TestKotlinType
+import org.junit.jupiter.api.Assertions
 import kotlin.reflect.KType
 import kotlin.reflect.jvm.javaType
 
@@ -21,20 +22,28 @@ fun KType.checkType(
         // We have a parametrized type
         if ("<" in this.javaType.toString() && kotlinType?.abbreviation == null) {
             val type = kotlinType?.getTypePrettyString() ?: javaType
-            assert(type.lowercase() in this.javaType.toString().lowercase()) { message }
+            Assertions.assertTrue(type.lowercase() in this.javaType.toString().lowercase(), message)
         } else {
-            assert(this.javaType.getShortName() == javaType.lowercase()) { message }
+            Assertions.assertEquals(this.javaType.getShortName(), javaType.lowercase(), message)
         }
     }
 }
 
 private fun KType.checkNullability(kotlinType: TestKotlinType, errorMessagePrefix: String) {
     val nullablePrefix = if (!kotlinType.isNullable) "" else "not"
-    assert(this.isMarkedNullable == kotlinType.isNullable) { "Error, $errorMessagePrefix must be $nullablePrefix nullable" }
+    Assertions.assertEquals(
+        this.isMarkedNullable,
+        kotlinType.isNullable,
+        "Error, $errorMessagePrefix must be $nullablePrefix nullable"
+    )
 }
 
 private fun KType.checkAbbreviation(abbreviation: String, errorMessagePrefix: String) {
-    assert(this.getAbbreviation() == abbreviation) { "The return type for $errorMessagePrefix must contain $abbreviation" }
+    Assertions.assertEquals(
+        this.getAbbreviation(),
+        abbreviation,
+        "The return type for $errorMessagePrefix must contain $abbreviation"
+    )
 }
 
 private fun KType.getAbbreviation(): String {

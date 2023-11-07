@@ -9,6 +9,7 @@ import com.intellij.psi.util.parentsOfType
 import org.jetbrains.academy.test.system.ij.formatting.formatting
 import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.psi.*
+import org.junit.jupiter.api.Assertions
 
 /** Extracts [kotlin elements][KtElement] of given type from kotlin related files in project. */
 /** Extracts elements of given type from [PsiElement] subtree. */
@@ -27,7 +28,7 @@ private fun KtProperty.getConstValue(): String? {
     if (possibleValue.isEmpty()) {
         return null
     }
-    require(possibleValue.size == 1) { "Parser error! A const variable must have only one value" }
+    Assertions.assertEquals(possibleValue.size, 1, "Parser error! A const variable must have only one value")
     return possibleValue.first().text.trimIndent()
 }
 

@@ -4,6 +4,7 @@ import org.jetbrains.academy.test.system.core.checkType
 import org.jetbrains.academy.test.system.core.models.TestKotlinType
 import org.jetbrains.academy.test.system.core.models.Visibility
 import org.jetbrains.academy.test.system.core.models.variable.TestVariable
+import org.junit.jupiter.api.Assertions
 import java.lang.reflect.Method
 import kotlin.reflect.jvm.kotlinFunction
 
@@ -40,9 +41,13 @@ data class TestMethod(
     fun checkMethod(method: Method) {
         val kotlinFunction =
             method.kotlinFunction ?: error("Can not find Kotlin method for the method ${this.prettyString()}")
-        assert(kotlinFunction.name == name) { "The function name must be: $name" }
+        Assertions.assertEquals(kotlinFunction.name, name, "The function name must be: $name")
         val visibility = kotlinFunction.visibility?.name?.lowercase()
-        assert(visibility == this.visibility.key) { "The visibility of the method $name must be ${this.visibility.key}" }
+        Assertions.assertEquals(
+            visibility,
+            this.visibility.key,
+            "\"The visibility of the method $name must be ${this.visibility.key}\""
+        )
         kotlinFunction.returnType.checkType(returnType, returnTypeJava ?: returnType.type, "the function $name")
     }
 }

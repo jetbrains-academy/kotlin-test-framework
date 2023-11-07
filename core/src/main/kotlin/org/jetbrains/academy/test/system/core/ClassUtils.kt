@@ -4,6 +4,7 @@ import org.jetbrains.academy.test.system.core.models.Visibility
 import org.jetbrains.academy.test.system.core.models.classes.ClassType
 import org.jetbrains.academy.test.system.core.models.classes.TestClass
 import org.jetbrains.academy.test.system.core.models.getVisibility
+import org.junit.jupiter.api.Assertions
 import java.lang.reflect.Modifier
 import kotlin.jvm.internal.DefaultConstructorMarker
 
@@ -51,24 +52,27 @@ fun Class<*>.checkIfIsDataClass(testClass: TestClass) {
         "toString",
     )
     dataClassMethods.forEach { dataClassMethod ->
-        assert(dataClassMethod in methodsNames || methodsNames.any { dataClassMethod in it }) { "${testClass.getFullName()} must be a data class" }
+        Assertions.assertTrue(
+            dataClassMethod in methodsNames || methodsNames.any { dataClassMethod in it },
+            "${testClass.getFullName()} must be a data class"
+        )
     }
     val componentN = testClass.declaredFields.filter { it.isInPrimaryConstructor && it.visibility == Visibility.PUBLIC }
     val componentNFunctions = methodsNames.filter { "component" in it }
     val componentNErrorMessage =
         "You must put only ${componentN.size} public fields into the primary constructor: ${componentN.joinToString(", ") { it.name }}."
-    assert(componentNFunctions.size == componentN.size) { componentNErrorMessage }
+    Assertions.assertEquals(componentNFunctions.size, componentN.size, componentNErrorMessage)
     componentN.forEachIndexed { index, _ ->
         val name = "component${index + 1}"
-        assert(name in methodsNames || methodsNames.any { name in it }) { componentNErrorMessage }
+        Assertions.assertTrue(name in methodsNames || methodsNames.any { name in it }, componentNErrorMessage)
     }
     val primary = testClass.declaredFields.filter { it.isInPrimaryConstructor }
     val constructorErrorMessage =
         "You must put only ${primary.size} fields into the primary constructor: ${primary.joinToString(", ") { it.name }}."
-    require(this.constructors.isNotEmpty()) { "The data class must have at least one constructor!" }
-    assert(this.constructors.any { constructor ->
+    Assertions.assertTrue(this.constructors.isNotEmpty(), "The data class must have at least one constructor!" )
+    Assertions.assertTrue(this.constructors.any { constructor ->
         constructor.parameterTypes.filter { it != DefaultConstructorMarker::class.java }.size == primary.size
-    }) { constructorErrorMessage }
+    }, constructorErrorMessage)
 }
 
 private fun Class<*>.hasSameVisibilityWith(testClass: TestClass) = this.getVisibility() == testClass.visibility

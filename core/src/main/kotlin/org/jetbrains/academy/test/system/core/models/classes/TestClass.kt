@@ -5,6 +5,7 @@ import org.jetbrains.academy.test.system.core.models.Visibility
 import org.jetbrains.academy.test.system.core.models.method.TestMethod
 import org.jetbrains.academy.test.system.core.models.method.TestMethodInvokeData
 import org.jetbrains.academy.test.system.core.models.variable.TestVariable
+import org.junit.jupiter.api.Assertions
 import java.lang.reflect.Constructor
 import java.lang.reflect.Method
 
@@ -43,14 +44,13 @@ data class TestClass(
     fun checkBaseDefinition(): Class<*> {
         val clazz = this.findClassSafe()
         val errorMessage = "You need to add: ${this.getBaseDefinition()}"
-        assert(clazz != null) { errorMessage }
-        assert(
-            clazz!!.isSameWith(this)
-        ) {
+        Assertions.assertNotNull(clazz, errorMessage)
+        Assertions.assertTrue(
+            clazz!!.isSameWith(this),
             "$errorMessage, but currently you added: ${
                 clazz.toTestClass(this.name, this.classPackage).getBaseDefinition()
             }"
-        }
+        )
         if (isDataClass) {
             clazz.checkIfIsDataClass(this)
         }
@@ -62,10 +62,17 @@ data class TestClass(
 
     private fun checkInterfaces(clazz: Class<*>) {
         val clazzInterfaces = clazz.interfaces
-        assert(this.interfaces.size == clazzInterfaces.size) { "The class ${getFullName()} must have ${this.interfaces.size} direct superclasses" }
+        Assertions.assertEquals(
+            this.interfaces.size,
+            clazzInterfaces.size,
+            "The class ${getFullName()} must have ${this.interfaces.size} direct superclasses"
+        )
         this.interfaces.forEach {
             val currentClazz = it.findClass()
-            assert(currentClazz in clazzInterfaces) { "The class ${getFullName()} must have ${it.getFullName()} as a direct superclass" }
+            Assertions.assertTrue(
+                currentClazz in clazzInterfaces,
+                "The class ${getFullName()} must have ${it.getFullName()} as a direct superclass"
+            )
         }
     }
 
@@ -75,7 +82,7 @@ data class TestClass(
         val declaredFields = clazz.getDeclaredFieldsWithoutCompanion()
         variables.forEach { field ->
             val currentField = declaredFields.find { it.name == field.name }
-            assert(currentField != null) { "Can not find the field with name ${field.name}" }
+            Assertions.assertNotNull(currentField, "Can not find the field with name ${field.name}")
             field.checkField(currentField!!, toCheckMutability)
         }
     }
@@ -84,29 +91,33 @@ data class TestClass(
 
     fun checkFieldsDefinition(clazz: Class<*>, toCheckDeclaredFieldsSize: Boolean = true) {
         if (toCheckDeclaredFieldsSize) {
-            assert(clazz.getDeclaredFieldsWithoutCompanion().size == this.declaredFields.size) { "You need to declare the following fields: ${this.getFieldsListPrettyString()}" }
+            Assertions.assertEquals(
+                clazz.getDeclaredFieldsWithoutCompanion().size,
+                this.declaredFields.size,
+                "You need to declare the following fields: ${this.getFieldsListPrettyString()}"
+            )
         }
         this.checkFields(clazz)
     }
 
     fun getJavaClass(): Class<*> {
         val clazz = this.findClassSafe()
-        assert(clazz != null) { "You need to add: ${this.getBaseDefinition()}" }
+        Assertions.assertNotNull(clazz, "You need to add: ${this.getBaseDefinition()}")
         return clazz!!
     }
 
     fun checkNoConstructors(clazz: Class<*>) {
-        assert(clazz.constructors.isEmpty()) { "The ${getBaseDefinition()} must not have any constructors" }
+        Assertions.assertTrue(clazz.constructors.isEmpty(), "The ${getBaseDefinition()} must not have any constructors")
     }
 
     fun getObjectInstance(clazz: Class<*>): Any {
         val field = clazz.getInstanceFiled()
-        require(field != null) { "Did not find the INSTANCE of the ${getFullName()}" }
-        return field.get(clazz) ?: error("Did not get the INSTANCE of the ${getFullName()}")
+        Assertions.assertNotNull(field, "Did not find the INSTANCE of the ${getFullName()}")
+        return field!!.get(clazz) ?: error("Did not get the INSTANCE of the ${getFullName()}")
     }
 
     fun checkConstructors(clazz: Class<*>, constructorGetters: List<ConstructorGetter>): Constructor<out Any> {
-        require(constructorGetters.isNotEmpty())
+        Assertions.assertTrue(constructorGetters.isNotEmpty())
         val arguments = constructorGetters.map { it.parameterTypes }.toSet()
         val constructors = mutableListOf<Constructor<*>>()
         constructorGetters.forEach {
@@ -114,12 +125,14 @@ data class TestClass(
                 constructors.add(constructor)
             }
         }
-        assert(constructors.isNotEmpty()) {
+
+        Assertions.assertTrue(
+            constructors.isNotEmpty(),
             """
                 You don't have any constructors with ${arguments.first().size} arguments in the class $name. 
                 Please, check the arguments, probably you need to add the default values.
             """
-        }
+        )
         return constructors.first()
     }
 
@@ -136,7 +149,10 @@ data class TestClass(
     }
 
     fun findMethod(clazz: Class<*>, method: TestMethod): Method {
-        assert(method in customMethods) { "The method ${method.name} was not found in the class ${getFullName()}" }
+        Assertions.assertTrue(
+            method in customMethods,
+            "The method ${method.name} was not found in the class ${getFullName()}"
+        )
         return clazz.methods.findMethod(method)
     }
 
