@@ -3,6 +3,7 @@ version = rootProject.version
 
 plugins {
     id("org.jetbrains.intellij") version "1.15.0"
+    id("java")
 }
 
 fun properties(key: String) = providers.gradleProperty(key)
