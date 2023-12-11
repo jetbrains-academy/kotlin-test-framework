@@ -14,12 +14,6 @@ import org.jetbrains.kotlin.psi.*
 import org.junit.jupiter.api.Assertions
 
 /** Extracts [kotlin elements][KtElement] of given type from kotlin related files in project. */
-/**
- * Extracts elements of given type from [PsiElement] subtree.
- *
- * @param psiElementClass vararg of [Class]es representing the desired types to extract.
- * @return a mutable collection of elements of the given types found in the subtree.
- */
 fun <T : PsiElement> PsiElement.extractElementsOfTypes(vararg psiElementClass: Class<out T>): MutableCollection<T> =
     psiElementClass.flatMap { PsiTreeUtil.collectElementsOfType(this, it) }.toMutableList()
 

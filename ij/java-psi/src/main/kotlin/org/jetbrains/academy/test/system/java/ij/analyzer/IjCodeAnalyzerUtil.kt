@@ -22,7 +22,6 @@ import com.intellij.psi.util.parentsOfType
 import org.jetbrains.academy.test.system.ij.formatting.formatting
 
 /** Extracts elements of given type from related files in project. */
-/** Extracts elements of given type from [PsiElement] subtree. */
 fun <T : PsiElement> PsiElement.extractElementsOfTypes(vararg psiElementClass: Class<out T>): MutableCollection<T> =
     psiElementClass.flatMap { PsiTreeUtil.collectElementsOfType(this, it) }.toMutableList()
 
