@@ -6,8 +6,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.psi.PsiFile
 import com.intellij.psi.codeStyle.CodeStyleManager
-import org.jetbrains.academy.test.system.inspections.applyInspections
-import org.jetbrains.kotlin.idea.inspections.KotlinUnusedImportInspection
 import org.junit.jupiter.api.Assertions
 
 // TODO: make it possible to check different aspects of formatting
@@ -31,11 +29,4 @@ fun PsiFile.formatting(): String? {
         codeStyleManager.reformat(this)
     }
     return ApplicationManager.getApplication().runReadAction<String> { text }
-}
-
-fun PsiFile.checkIfOptimizeImportsWereApplied() {
-    Assertions.assertTrue(
-        applyInspections(listOf(KotlinUnusedImportInspection())).isEmpty(),
-        "Please, apply \"Optimize import\" option when formatting code."
-    )
 }
