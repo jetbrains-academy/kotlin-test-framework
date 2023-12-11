@@ -1,6 +1,7 @@
 package org.jetbrains.academy.test.system.java.ij
 
 import org.jetbrains.academy.test.system.java.test.BaseIjTestClass
+import org.junit.jupiter.api.Assertions
 
 class BaseIjTestClassTests : BaseIjTestClass() {
 
@@ -240,6 +241,47 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         assert(hasMethod(value)) { "There must exist a method with name $value" }
         assertFalse(hasMethod("CONSTANT"))
         assertFalse(hasMethod("Content"))
+    }
+
+    fun testHasClass() {
+        val example = """
+            public class ExampleClass {
+                public void method() {
+                    String actions = "Some actions";
+                    System.out.println(actions);
+                }
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.java", example)
+        val name = "ExampleClass"
+        Assertions.assertTrue(hasClass(name), "There must exist a class with name $name")
+        Assertions.assertFalse(hasClass("method"))
+        Assertions.assertFalse(hasClass("Class"))
+    }
+
+    fun testHasParameter() {
+        val example = """
+            public class ExampleClass {
+                private static final String PARAMETER = "some text";
+
+                public void method1(Int parameter1, String parameter2) {
+                    System.out.println(parameter2);
+                }
+
+                public void method2(Double y) {
+                    System.out.println("Content");
+                }
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.java", example)
+        var value = "parameter1"
+        Assertions.assertTrue(hasParameter(value), "There must exist a parameter with name $value")
+        value = "parameter2"
+        Assertions.assertTrue(hasParameter(value), "There must exist a parameter with name $value")
+        value = "y"
+        Assertions.assertTrue(hasParameter(value), "There must exist a parameter with name $value")
+        Assertions.assertFalse(hasParameter("PARAMETER"))
+        Assertions.assertFalse(hasParameter("Content"))
     }
 
     fun testHasExpressionWithParent() {

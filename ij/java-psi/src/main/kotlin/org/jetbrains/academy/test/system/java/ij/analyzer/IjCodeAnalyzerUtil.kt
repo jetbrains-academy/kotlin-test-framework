@@ -3,13 +3,25 @@ package org.jetbrains.academy.test.system.java.ij.analyzer
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
-import com.intellij.psi.*
+import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiField
+import com.intellij.psi.PsiMethod
+import com.intellij.psi.PsiNamedElement
+import com.intellij.psi.PsiCallExpression
+import com.intellij.psi.PsiReferenceExpression
+import com.intellij.psi.PsiNewExpression
+import com.intellij.psi.PsiMethodCallExpression
+import com.intellij.psi.PsiParameter
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.PsiLiteralExpression
+import com.intellij.psi.PsiCodeBlock
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentsOfType
 import org.jetbrains.academy.test.system.ij.formatting.formatting
-import org.jetbrains.kotlin.psi.*
 
-/** Extracts elements of given type from kotlin related files in project. */
+/** Extracts elements of given type from related files in project. */
 /** Extracts elements of given type from [PsiElement] subtree. */
 fun <T : PsiElement> PsiElement.extractElementsOfTypes(vararg psiElementClass: Class<out T>): MutableCollection<T> =
     psiElementClass.flatMap { PsiTreeUtil.collectElementsOfType(this, it) }.toMutableList()
@@ -52,8 +64,7 @@ private fun PsiMethod.getBlockBody(): String? {
     if (possibleBody.isEmpty()) {
         return null
     }
-    val a = possibleBody.first().text.trimBraces().trimIndent()
-    return a
+    return possibleBody.first().text.trimBraces().trimIndent()
 }
 
 /**
@@ -107,14 +118,24 @@ fun PsiFile.findMethodUsages(methodName: String): List<String> =
     }
 
 /**
+ * Checks if the given PsiFile contains an element of the specified type and with the provided name.
+ *
+ * @param psiElementClass The class object representing the type of the element to search for.
+ * @param name The name of the element to search for.
+ * @return `true` if an element with the specified type and name is found, `false` otherwise.
+ */
+fun <T : PsiNamedElement> PsiFile.hasElementOfTypeWithName(psiElementClass: Class<out T>, name: String): Boolean =
+    ApplicationManager.getApplication().runReadAction<Boolean> {
+        extractElementsOfTypes(psiElementClass).any { it.name == name }
+    }
+
+/**
  * Checks if the PsiFile contains a filed with the specified name.
  *
  * @param filedName The name of the filed to search for.
  * @return True if the PsiFile contains a property with the given name, false otherwise.
  */
-fun PsiFile.hasProperty(filedName: String): Boolean = ApplicationManager.getApplication().runReadAction<Boolean> {
-    extractElementsOfTypes(PsiField::class.java).any { it.name == filedName }
-}
+fun PsiFile.hasProperty(filedName: String): Boolean = hasElementOfTypeWithName(PsiField::class.java, filedName)
 
 /**
  * Checks if the PsiFile contains a method with the specified method name.
@@ -122,9 +143,23 @@ fun PsiFile.hasProperty(filedName: String): Boolean = ApplicationManager.getAppl
  * @param methodName The name of the method to search for.
  * @return True if the PsiFile contains a method with the given name, false otherwise.
  */
-fun PsiFile.hasMethod(methodName: String): Boolean = ApplicationManager.getApplication().runReadAction<Boolean> {
-    extractElementsOfTypes(PsiMethod::class.java).any { it.name == methodName }
-}
+fun PsiFile.hasMethod(methodName: String): Boolean = hasElementOfTypeWithName(PsiMethod::class.java, methodName)
+
+/**
+ * Checks whether the [PsiFile] contains a class with the specified [className].
+ *
+ * @param className The name of the class to check for.
+ * @return `true` if the [PsiFile] contains a class with the specified [className], `false` otherwise.
+ */
+fun PsiFile.hasClass(className: String): Boolean = hasElementOfTypeWithName(PsiClass::class.java, className)
+
+/**
+ * Checks if the [PsiFile] has a parameter with the specified name.
+ *
+ * @param parameterName the name of the parameter to check
+ * @return true if the [PsiFile] contains a parameter with the specified name, false otherwise
+ */
+fun PsiFile.hasParameter(parameterName: String): Boolean = hasElementOfTypeWithName(PsiParameter::class.java, parameterName)
 
 /**
  * Retrieves the text of the parent element of the given PsiElement.

@@ -251,6 +251,42 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         Assertions.assertFalse(hasMethod("Content"))
     }
 
+    fun testHasClass() {
+        val example = """
+            class ExampleClass {
+                fun method() =  { "Some actions" }
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.kt", example)
+        val name = "ExampleClass"
+        Assertions.assertTrue(hasClass(name), "There must exist a class with name $name")
+        Assertions.assertFalse(hasClass("method"))
+        Assertions.assertFalse(hasClass("Class"))
+    }
+
+    fun testHasParameter() {
+        val example = """
+            private const val PARAMETER = "some text"
+            
+            fun method1(parameter1: Int, parameter2: String) {
+                println(parameter2)
+            }
+            
+            fun method2(y: Double) {
+                println("Content")
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.kt", example)
+        var value = "parameter1"
+        Assertions.assertTrue(hasParameter(value), "There must exist a parameter with name $value")
+        value = "parameter2"
+        Assertions.assertTrue(hasParameter(value), "There must exist a parameter with name $value")
+        value = "y"
+        Assertions.assertTrue(hasParameter(value), "There must exist a parameter with name $value")
+        Assertions.assertFalse(hasParameter("PARAMETER"))
+        Assertions.assertFalse(hasParameter("Content"))
+    }
+
     fun testHasExpressionWithParent() {
         val example = """
             private const val CONSTANT = Int.MAX_VALUE

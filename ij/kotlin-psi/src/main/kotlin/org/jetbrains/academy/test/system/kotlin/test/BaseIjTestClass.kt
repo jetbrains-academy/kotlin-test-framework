@@ -7,6 +7,8 @@ import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasConstantWithGiven
 import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasMethod
 import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasProperty
 import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasExpressionWithParent
+import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasClass
+import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasParameter
 
 
 /**
@@ -25,6 +27,10 @@ open class BaseIjTestClass : BasePlatformTestCase() {
     fun hasProperty(propertyName: String): Boolean = myFixture.file.hasProperty(propertyName)
 
     fun hasMethod(methodName: String): Boolean = myFixture.file.hasMethod(methodName)
+
+    fun hasClass(className: String): Boolean = myFixture.file.hasClass(className)
+
+    fun hasParameter(parameterName: String): Boolean = myFixture.file.hasParameter(parameterName)
 
     fun hasExpressionWithParent(expression: String, parent: String?, isParentTypeFunction: Boolean = false): Boolean =
         myFixture.file.hasExpressionWithParent(expression, parent, isParentTypeFunction)
