@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenComment")
+
 package org.jetbrains.academy.test.system.inspections
 
 import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator
@@ -32,6 +34,7 @@ fun PsiFile.applyLocalInspections(inspections: List<LocalInspectionTool>): List<
 }
 
 fun PsiFile.applyGlobalInspections(inspections: List<GlobalSimpleInspectionTool>): Boolean {
+    // TODO: `checkFile` doesn't work due to `resolve` doesn't work
     val inspectionManager = InspectionManager.getInstance(project)
     val problemDescriptionsProcessor = MyProblemDescriptionsProcessor()
     val globalContext = GlobalInspectionContextBase(project)

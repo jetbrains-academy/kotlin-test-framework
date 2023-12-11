@@ -73,7 +73,6 @@ val spacePassword = getLocalProperty("spacePassword")
 
 configure(subprojects) {
     apply(plugin = "maven-publish")
-    apply(plugin = "java")
 
     val subprojectName = this.name
 
