@@ -2,10 +2,43 @@ package org.jetbrains.academy.test.system.kotlin.ij
 
 import org.junit.jupiter.api.Assertions
 import org.jetbrains.academy.test.system.kotlin.test.BaseIjTestClass
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 
 class BaseIjTestClassTests : BaseIjTestClass() {
 
-    fun testFindMethodsWithContent() {
+    companion object {
+        @JvmStatic
+        fun findMethodUsagesTestProvider() = listOf(
+            Arguments.of("method(\"Content\")", listOf("innerFunction", "method2")),
+            Arguments.of("method(\"y is greater than 5\")", listOf("method1")),
+            Arguments.of("method(\"y is less than 5\")", listOf("method1")),
+            Arguments.of("method(content)", emptyList<String>())
+        )
+
+        @JvmStatic
+        fun hasExpressionWithParentTestProvider() = listOf(
+            Arguments.of("productPrice.sum()", "productPrice.sum() / productPrice.count()"),
+            Arguments.of("File(\\\"Exception.txt\\\")", "File(\\\"Exception.txt\\\")"),
+            Arguments.of("PrintWriter(File(\\\"Exception.txt\\\"), Charsets.UTF_8).use { it.print(error.toString()) }", "calculateAveragePrice"),
+            Arguments.of("Int.MAX_VALUE", "val CONSTANT = Int.MAX_VALUE"),
+            Arguments.of("Int.MAX_VALUE", null)
+        )
+
+        @JvmStatic
+        fun findMethodsWithContentTestProvider() = listOf(
+            Arguments.of("""
+            val actions = "Some actions"
+            println("Content")
+            println(actions)
+        """, "method1")
+        )
+    }
+
+    @ParameterizedTest
+    @MethodSource("findMethodsWithContentTestProvider")
+    fun testFindMethodsWithContent(content: String, methodName: String) {
         val example = """
             class ExampleClass {
 
@@ -27,12 +60,6 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             }
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
-        val content = """
-            val actions = "Some actions"
-            println("Content")
-            println(actions)
-        """.trimIndent()
-        val methodName = "method1"
         Assertions.assertEquals(
             listOf(methodName),
             findMethodsWithContent(content),
@@ -56,7 +83,9 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         )
     }
 
-    fun testFindMethodsWithContentWithBrokenFormatting() {
+    @ParameterizedTest
+    @MethodSource("findMethodsWithContentTestProvider")
+    fun testFindMethodsWithContentWithBrokenFormatting(content: String, methodName: String) {
         val example = """
             class ExampleClass {
 
@@ -72,12 +101,6 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             }
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
-        val content = """
-            val actions = "Some actions"
-            println("Content")
-            println(actions)
-        """.trimIndent()
-        val methodName = "method1"
         Assertions.assertEquals(
             listOf(methodName),
             findMethodsWithContent(content),
@@ -139,7 +162,9 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         Assertions.assertFalse(hasConstantWithGivenValue("0.5"))
     }
 
-    fun testFindMethodUsages() {
+    @ParameterizedTest
+    @MethodSource("findMethodUsagesTestProvider")
+    fun testFindMethodUsages(methodName: String, methodsList: List<String>) {
         val example = """
             class ExampleClass {
                 fun outerFunction(x: Int): Int {
@@ -172,30 +197,11 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             }
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
-        var methodName = "method(\"Content\")"
-        var methodsList = listOf("innerFunction", "method2")
         Assertions.assertEquals(
             methodsList,
             findMethodUsages(methodName),
             "Method $methodName should be called in methods: $methodsList"
         )
-        methodName = "method(\"y is greater than 5\")"
-        methodsList = listOf("method1")
-        Assertions.assertEquals(
-            methodsList,
-            findMethodUsages(methodName),
-            "Method $methodName should be called in methods: $methodsList"
-        )
-        methodName = "method(\"y is less than 5\")"
-        methodsList = listOf("method1")
-        Assertions.assertEquals(
-            methodsList,
-            findMethodUsages(methodName),
-            "Method $methodName should be called in methods: $methodsList"
-        )
-        methodName = "method(content)"
-        methodsList = listOf()
-        Assertions.assertEquals(methodsList, findMethodUsages(methodName), "Method $methodName should not be called")
     }
 
     fun testHasProperty() {
@@ -287,7 +293,9 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         Assertions.assertFalse(hasParameter("Content"))
     }
 
-    fun testHasExpressionWithParent() {
+    @ParameterizedTest
+    @MethodSource("hasExpressionWithParentTestProvider")
+    fun testHasExpressionWithParent(expression: String, parent: String?) {
         val example = """
             private const val CONSTANT = Int.MAX_VALUE
             
@@ -301,31 +309,8 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             }
         """.trimIndent()
         myFixture.configureByText("Task.kt", example)
-        var expression: String = "productPrice.sum()"
-        var parent: String? = "productPrice.sum() / productPrice.count()"
         Assertions.assertTrue(
             hasExpressionWithParent(expression, parent),
-            "There must exist an expression $expression with parent $parent"
-        )
-        expression = "File(\"Exception.txt\")"
-        parent = "File(\"Exception.txt\")"
-        Assertions.assertTrue(
-            hasExpressionWithParent(expression, parent),
-            "There must exist an expression $expression with parent $parent"
-        )
-        expression = "PrintWriter(File(\"Exception.txt\"), Charsets.UTF_8).use { it.print(error.toString()) }"
-        parent = "calculateAveragePrice"
-        Assertions.assertTrue(
-            hasExpressionWithParent(expression, parent, true),
-            "There must exist an expression $expression with parent $parent"
-        )
-        expression = "Int.MAX_VALUE"
-        parent = "val CONSTANT = Int.MAX_VALUE"
-        Assertions.assertFalse(hasExpressionWithParent(expression, parent))
-        expression = "Int.MAX_VALUE"
-        parent = null
-        Assertions.assertTrue(
-            hasExpressionWithParent(expression, parent, true),
             "There must exist an expression $expression with parent $parent"
         )
     }
