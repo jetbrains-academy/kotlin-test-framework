@@ -2,6 +2,7 @@ import java.util.Properties
 
 plugins {
     kotlin("jvm") version "1.8.20"
+    java
     id("io.gitlab.arturbosch.detekt") version "1.21.0"
     `maven-publish`
 }
@@ -12,6 +13,7 @@ version = "2.1.0"
 allprojects {
     apply {
         plugin("kotlin")
+        plugin("java")
         plugin("io.gitlab.arturbosch.detekt")
     }
 
@@ -21,6 +23,11 @@ allprojects {
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
         testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
         testRuntimeOnly("org.junit.platform:junit-platform-console:1.9.2")
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     repositories {
@@ -65,10 +72,14 @@ val spaceUsername = getLocalProperty("spaceUsername")
 val spacePassword = getLocalProperty("spacePassword")
 
 configure(subprojects) {
-    apply(plugin = "maven-publish")
-
     val subprojectName = this.name
 
+    // We don't need to publish the root ij project
+    if (subprojectName == "ij") {
+        return@configure
+    }
+
+    apply(plugin = "maven-publish")
     publishing {
         publications {
             register<MavenPublication>("maven") {
