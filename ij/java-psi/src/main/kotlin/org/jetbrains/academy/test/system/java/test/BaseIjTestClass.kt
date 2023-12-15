@@ -8,6 +8,7 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiField
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiCallExpression
+import com.intellij.psi.PsiLocalVariable
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.jetbrains.academy.test.system.ij.analyzer.findMethodUsages
 import org.jetbrains.academy.test.system.ij.analyzer.hasElementOfTypeWithName
@@ -29,8 +30,11 @@ open class BaseIjTestClass : BasePlatformTestCase() {
     fun findMethodUsages(content: String): List<String> =
         myFixture.file.findMethodUsages(content, PsiCallExpression::class.java, PsiMethod::class.java)
 
-    fun hasProperty(propertyName: String): Boolean =
-        myFixture.file.hasElementOfTypeWithName(PsiField::class.java, propertyName)
+    fun hasField(fieldName: String): Boolean =
+        myFixture.file.hasElementOfTypeWithName(PsiField::class.java, fieldName)
+
+    fun hasLocalVariable(localVariableName: String): Boolean =
+        myFixture.file.hasElementOfTypeWithName(PsiLocalVariable::class.java, localVariableName)
 
     fun hasMethod(methodName: String): Boolean =
         myFixture.file.hasElementOfTypeWithName(PsiMethod::class.java, methodName)

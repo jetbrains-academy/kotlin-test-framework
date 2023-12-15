@@ -193,7 +193,7 @@ class BaseIjTestClassTests : BaseIjTestClass() {
         }
     }
 
-    fun testHasProperty() {
+    fun testHasField() {
         val example = """
             public class ExampleClass {
                 private static final String CONSTANT = "some text";
@@ -201,19 +201,41 @@ class BaseIjTestClassTests : BaseIjTestClass() {
                 private int number = 2;
 
                 public void method() {
+                    double waveLength = 0.5e-6;
                     System.out.println("Content");
                 }
             }
         """.trimIndent()
         myFixture.configureByText("Task.java", example)
         var value = "CONSTANT"
-        assert(hasProperty(value)) { "There must exist a property with name $value" }
+        assert(hasField(value)) { "There must exist a property with name $value" }
         value = "value"
-        assert(hasProperty(value)) { "There must exist a property with name $value" }
+        assert(hasField(value)) { "There must exist a property with name $value" }
         value = "number"
-        assert(hasProperty(value)) { "There must exist a property with name $value" }
-        assertFalse(hasProperty("method"))
-        assertFalse(hasProperty("Content"))
+        assert(hasField(value)) { "There must exist a property with name $value" }
+        assertFalse(hasField("method"))
+        assertFalse(hasField("Content"))
+    }
+
+    fun testHasLocalVariable() {
+        val example = """
+            public class ExampleClass {
+                private static final String CONSTANT = "some text";
+
+                public void method() {
+                    double value = 0.5;
+                    int number = 2;
+                    System.out.println("Content");
+                }
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.java", example)
+        var value = "value"
+        assert(hasLocalVariable(value)) { "There must exist a local variable with name $value" }
+        value = "number"
+        assert(hasLocalVariable(value)) { "There must exist a local variable with name $value" }
+        assertFalse(hasLocalVariable("CONSTANT"))
+        assertFalse(hasLocalVariable("Content"))
     }
 
     fun testHasMethod() {

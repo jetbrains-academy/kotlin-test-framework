@@ -2,6 +2,7 @@ package org.jetbrains.academy.test.system.java.ij.analyzer
 
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiField
@@ -48,7 +49,7 @@ private fun formattingContent(content: String, project: Project): String {
  * @return A list of method names whose bodies match the provided content.
  */
 fun PsiFile.findMethodsWithContent(content: String): List<String> =
-    ApplicationManager.getApplication().runReadAction<List<String>> {
+    WriteCommandAction.runWriteCommandAction<List<String>>(project) {
         formatting()
         val formattingContent = formattingContent(content, project)
 
