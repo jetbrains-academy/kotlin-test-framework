@@ -16,7 +16,7 @@ val mySamInterfaceTestClass = TestClass(
     customMethods = listOf(
         TestMethod(
             "samMethod",
-            TestKotlinType(
+            returnType = TestKotlinType(
                 "List",
                 params = listOf("java.lang.string")
             ),

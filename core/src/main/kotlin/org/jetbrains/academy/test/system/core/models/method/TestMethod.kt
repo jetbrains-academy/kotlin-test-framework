@@ -20,12 +20,28 @@ import kotlin.reflect.jvm.kotlinFunction
  */
 data class TestMethod(
     val name: String,
-    val returnType: TestKotlinType,
+    val returnTypeJava: String,
+    val returnType: TestKotlinType? = null,
     val arguments: List<TestVariable> = emptyList(),
-    val returnTypeJava: String? = null,
     val visibility: Visibility = Visibility.PUBLIC,
     val hasGeneratedPartInName: Boolean = false,
 ) {
+    constructor(
+        name: String,
+        returnTypeJava: String,
+        arguments: List<TestVariable>,
+        visibility: Visibility
+    ) : this(
+        name = name,
+        returnTypeJava = returnTypeJava,
+        returnType = null,
+        arguments = arguments,
+        visibility = visibility,
+        hasGeneratedPartInName = false
+    )
+
+    private fun getTypePrettyString() = returnType?.getTypePrettyString() ?: returnTypeJava
+
     fun prettyString(withToDo: Boolean = true): String {
         val args = arguments.joinToString(", ") { it.paramPrettyString() }
         val body = if (withToDo) {
@@ -33,7 +49,7 @@ data class TestMethod(
         } else {
             "// Some code"
         }
-        return "${visibility.key} fun $name($args): ${returnType.getTypePrettyString()} = $body"
+        return "${visibility.key} fun $name($args): ${getTypePrettyString()} = $body"
     }
 
     private fun TestVariable.paramPrettyString() = "$name: $javaType"
@@ -48,6 +64,6 @@ data class TestMethod(
             this.visibility.key,
             "\"The visibility of the method $name must be ${this.visibility.key}\""
         )
-        kotlinFunction.returnType.checkType(returnType, returnTypeJava ?: returnType.type, "the function $name")
+        kotlinFunction.returnType.checkType(returnType, returnTypeJava, "the function $name")
     }
 }

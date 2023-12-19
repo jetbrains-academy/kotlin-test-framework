@@ -39,6 +39,29 @@ data class TestVariable(
     val isConst: Boolean = false,
     // TODO: add nullability?
 ) {
+    constructor(
+        name: String,
+        javaType: String,
+        value: String?,
+        visibility: Visibility?,
+        isFinal: Boolean,
+        isInPrimaryConstructor: Boolean,
+        isStatic: Boolean,
+        isConst: Boolean
+    ) : this(
+        name = name,
+        javaType = javaType,
+        value = value,
+        kotlinType = null,
+        visibility = visibility,
+        mutability = if (isFinal) VariableMutability.VAL else VariableMutability.VAR,
+        isInPrimaryConstructor = isInPrimaryConstructor,
+        isStatic = isStatic,
+        isConst = isConst
+    )
+
+    constructor(name: String, javaType: String) : this(name, javaType, null, null, null, null, false, false, false)
+
     private fun getTypePrettyString() = kotlinType?.getTypePrettyString() ?: javaType
 
     fun prettyString(): String {
@@ -69,10 +92,7 @@ data class TestVariable(
             }
         }
         field.kotlinProperty?.returnType?.checkType(
-            kotlinType,
-            javaType,
-            "the field $name",
-            false
+            kotlinType, javaType, "the field $name", false
         )
     }
 }
@@ -86,8 +106,7 @@ fun TestVariable.isVariableExist(fileContent: String): Boolean {
     val defWithType = variableDefTemplateWithType()
     if (!(baseDef in fileContent || defWithType in fileContent)) {
         error(
-            "The code should contains a definition of the ${this.name} variable! " +
-                    "Please, add <$baseDef> or <$defWithType> code in your solution."
+            "The code should contains a definition of the ${this.name} variable! " + "Please, add <$baseDef> or <$defWithType> code in your solution."
         )
     }
     return true
