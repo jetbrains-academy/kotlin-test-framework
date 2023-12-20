@@ -81,11 +81,13 @@ val javaClassTestClass = TestClass(
         TestMethod(
             name = "publicMethod",
             returnTypeJava = "void",
+            arguments = emptyList(),
             visibility = Visibility.PUBLIC
         ),
         TestMethod(
             name = "privateMethod",
             returnTypeJava = "void",
+            arguments = emptyList(),
             visibility = Visibility.PRIVATE
         ),
         TestMethod(
