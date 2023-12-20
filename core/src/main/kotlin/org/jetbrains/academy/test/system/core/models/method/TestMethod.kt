@@ -26,6 +26,20 @@ data class TestMethod(
     val visibility: Visibility = Visibility.PUBLIC,
     val hasGeneratedPartInName: Boolean = false,
 ) {
+    constructor(
+        name: String,
+        returnTypeJava: String,
+        arguments: List<TestVariable>,
+        visibility: Visibility
+    ) : this(
+        name = name,
+        returnType = TestKotlinType(returnTypeJava),
+        arguments = arguments,
+        returnTypeJava = returnTypeJava,
+        visibility = visibility,
+        hasGeneratedPartInName = false
+    )
+
     fun prettyString(withToDo: Boolean = true): String {
         val args = arguments.joinToString(", ") { it.paramPrettyString() }
         val body = if (withToDo) {
