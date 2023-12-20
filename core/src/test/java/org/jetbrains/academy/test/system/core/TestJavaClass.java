@@ -30,7 +30,6 @@ public class TestJavaClass {
                                 Visibility.PUBLIC,
                                 true,
                                 false,
-                                false,
                                 true
                         ),
                         new TestVariable(
@@ -39,7 +38,6 @@ public class TestJavaClass {
                                 "2",
                                 Visibility.PRIVATE,
                                 true,
-                                false,
                                 false,
                                 true
                         ),
@@ -50,8 +48,7 @@ public class TestJavaClass {
                                 Visibility.PUBLIC,
                                 false,
                                 false,
-                                true,
-                                false
+                                true
                         ),
                         new TestVariable(
                                 "privateStaticVar",
@@ -60,15 +57,13 @@ public class TestJavaClass {
                                 Visibility.PRIVATE,
                                 false,
                                 false,
-                                true,
-                                false
+                                true
                         ),
                         new TestVariable(
                                 "publicVar",
                                 "String",
                                 "publicVar",
                                 Visibility.PUBLIC,
-                                false,
                                 false,
                                 false,
                                 false
@@ -78,7 +73,6 @@ public class TestJavaClass {
                                 "String",
                                 "privateVar",
                                 Visibility.PRIVATE,
-                                false,
                                 false,
                                 false,
                                 false
@@ -90,7 +84,6 @@ public class TestJavaClass {
                                 Visibility.PUBLIC,
                                 false,
                                 false,
-                                false,
                                 false
                         ),
                         new TestVariable(
@@ -100,7 +93,6 @@ public class TestJavaClass {
                                 Visibility.PUBLIC,
                                 false,
                                 true,
-                                false,
                                 false
                         )
                 ),

@@ -46,8 +46,7 @@ data class TestVariable(
         visibility: Visibility?,
         isFinal: Boolean,
         isInPrimaryConstructor: Boolean,
-        isStatic: Boolean,
-        isConst: Boolean
+        isStatic: Boolean
     ) : this(
         name = name,
         javaType = javaType,
@@ -57,7 +56,7 @@ data class TestVariable(
         mutability = if (isFinal) VariableMutability.VAL else VariableMutability.VAR,
         isInPrimaryConstructor = isInPrimaryConstructor,
         isStatic = isStatic,
-        isConst = isConst
+        isConst = isStatic && isFinal
     )
 
     constructor(name: String, javaType: String) : this(name, javaType, null, null, null, null, false, false, false)

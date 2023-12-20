@@ -15,25 +15,25 @@ val javaClassTestClass = TestClass(
             javaType = "int",
             value = "1",
             visibility = Visibility.PUBLIC,
-            mutability = VariableMutability.VAL,
+            isFinal = true,
             isInPrimaryConstructor = false,
-            isConst = true
+            isStatic = true
         ),
         TestVariable(
             name = "PRIVATE_CONSTANT",
             javaType = "int",
             value = "2",
             visibility = Visibility.PRIVATE,
-            mutability = VariableMutability.VAL,
+            isFinal = true,
             isInPrimaryConstructor = false,
-            isConst = true
+            isStatic = true
         ),
         TestVariable(
             name = "publicStaticVar",
             javaType = "int",
             value = "3",
             visibility = Visibility.PUBLIC,
-            mutability = VariableMutability.VAR,
+            isFinal = false,
             isInPrimaryConstructor = false,
             isStatic = true
         ),
@@ -42,7 +42,7 @@ val javaClassTestClass = TestClass(
             javaType = "int",
             value = "4",
             visibility = Visibility.PRIVATE,
-            mutability = VariableMutability.VAR,
+            isFinal = false,
             isInPrimaryConstructor = false,
             isStatic = true
         ),
@@ -51,30 +51,36 @@ val javaClassTestClass = TestClass(
             javaType = "String",
             value = "publicVar",
             visibility = Visibility.PUBLIC,
-            mutability = VariableMutability.VAR,
+            isFinal = false,
             isInPrimaryConstructor = false,
+            isStatic = false
         ),
         TestVariable(
             name = "privateVar",
             javaType = "String",
             value = "privateVar",
             visibility = Visibility.PRIVATE,
-            mutability = VariableMutability.VAR,
+            isFinal = false,
             isInPrimaryConstructor = false,
+            isStatic = false
         ),
         TestVariable(
             name = "customClass",
             javaType = "CustomJavaClass",
+            value = null,
             visibility = Visibility.PUBLIC,
-            mutability = VariableMutability.VAR,
+            isFinal = false,
             isInPrimaryConstructor = false,
+            isStatic = false
         ),
         TestVariable(
             name = "primaryConstructorVar",
             javaType = "String",
+            value = null,
             visibility = Visibility.PUBLIC,
-            mutability = VariableMutability.VAR,
+            isFinal = false,
             isInPrimaryConstructor = true,
+            isStatic = false
         ),
     ),
     customMethods = listOf(
