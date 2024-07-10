@@ -4,12 +4,7 @@ import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiField
-import com.intellij.psi.PsiMethod
-import com.intellij.psi.PsiFileFactory
-import com.intellij.psi.PsiLiteralExpression
-import com.intellij.psi.PsiCodeBlock
+import com.intellij.psi.*
 import org.jetbrains.academy.test.system.ij.analyzer.extractElementsOfTypes
 import org.jetbrains.academy.test.system.ij.analyzer.getBlockBody
 import org.jetbrains.academy.test.system.ij.analyzer.getConstValue
@@ -55,4 +50,18 @@ fun PsiFile.findMethodsWithContent(content: String): List<String> =
 
         val methods = extractElementsOfTypes(PsiMethod::class.java)
         methods.filter { it.getBlockBody(PsiCodeBlock::class.java) == formattingContent }.mapNotNull { it.name }.toList()
+    }
+
+/**
+ * Retrieves the arguments of a method call with the given method name.
+ *
+ * @param methodName The name of the method to retrieve the arguments for.
+ * @return A list of strings representing the arguments of the method call,
+ *         or null if no method call with the given name is found.
+ */
+fun PsiFile.getMethodCallArguments(methodName: String): List<String>? =
+    ApplicationManager.getApplication().runReadAction<List<String>?> {
+        extractElementsOfTypes(PsiMethodCallExpression::class.java)
+            .firstOrNull { it.methodExpression.referenceName == methodName }
+            ?.argumentList?.expressions?.mapNotNull { it.text }
     }

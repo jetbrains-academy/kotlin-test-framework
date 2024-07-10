@@ -5,6 +5,7 @@ import org.jetbrains.academy.test.system.ij.analyzer.findMethodUsages
 import org.jetbrains.academy.test.system.ij.analyzer.hasElementOfTypeWithName
 import org.jetbrains.academy.test.system.ij.analyzer.hasExpressionWithParent
 import org.jetbrains.academy.test.system.kotlin.ij.analyzer.findMethodsWithContent
+import org.jetbrains.academy.test.system.kotlin.ij.analyzer.getMethodCallArguments
 import org.jetbrains.academy.test.system.kotlin.ij.analyzer.hasConstantWithGivenValue
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -43,4 +44,7 @@ open class BaseIjTestClass : BasePlatformTestCase() {
             expression, parent, isParentTypeFunction, KtNamedFunction::class.java,
             KtDotQualifiedExpression::class.java, KtCallExpression::class.java
         )
+
+    fun getMethodCallArguments(methodName: String): List<String>? =
+        myFixture.file.getMethodCallArguments(methodName)
 }
