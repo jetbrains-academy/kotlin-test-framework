@@ -348,4 +348,26 @@ class BaseIjTestClassTests : BaseIjTestClass() {
             "There must exist an expression $expression with parent $parent"
         }
     }
+
+    fun testGetMethodCallArguments() {
+        val example = """
+            public class ExampleClass {
+                public static void calculateDogAgeInDogYears() {
+                    description(""${'"'}
+                        text
+                    ""${'"'}.trimIndent())
+                }
+            }
+        """.trimIndent()
+        myFixture.configureByText("Task.java", example)
+        val methodName = "description"
+        val argument = """
+            ""${'"'}
+                        text
+                    ""${'"'}.trimIndent()
+        """.trimIndent()
+        Assertions.assertEquals(argument, getMethodCallArguments("description")?.firstOrNull()?.trimIndent()) {
+            "There must exist an method call $methodName with arguments $argument"
+        }
+    }
 }

@@ -7,11 +7,7 @@ import com.intellij.psi.PsiFileFactory
 import org.jetbrains.academy.test.system.ij.analyzer.*
 import org.jetbrains.academy.test.system.ij.formatting.formatting
 import org.jetbrains.kotlin.idea.KotlinFileType
-import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.*
 
 /**
  * Checks if PsiFile contains a constant property with the given element value.
@@ -42,4 +38,16 @@ fun PsiFile.findMethodsWithContent(content: String): List<String> =
             extractElementsOfTypes(KtNamedFunction::class.java)
         }
         methods.filter { it.getBlockBody(KtBlockExpression::class.java) == formattingContent }.mapNotNull { it.name }.toList()
+    }
+
+/**
+ * Retrieves the method call arguments of the specified method from the given PsiFile.
+ *
+ * @param methodName The name of the method to retrieve the arguments for.
+ * @return A list of strings representing the arguments of the method call, or null if the method is not found or has no arguments.
+ */
+fun PsiFile.getMethodCallArguments(methodName: String): List<String>? =
+    ApplicationManager.getApplication().runReadAction<List<String>?> {
+        extractElementsOfTypes(KtCallExpression::class.java).firstOrNull { it.calleeExpression?.text == methodName }
+            ?.valueArguments?.mapNotNull { it.text }
     }

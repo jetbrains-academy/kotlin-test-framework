@@ -14,6 +14,7 @@ import org.jetbrains.academy.test.system.ij.analyzer.findMethodUsages
 import org.jetbrains.academy.test.system.ij.analyzer.hasElementOfTypeWithName
 import org.jetbrains.academy.test.system.ij.analyzer.hasExpressionWithParent
 import org.jetbrains.academy.test.system.java.ij.analyzer.findMethodsWithContent
+import org.jetbrains.academy.test.system.java.ij.analyzer.getMethodCallArguments
 import org.jetbrains.academy.test.system.java.ij.analyzer.hasConstantWithGivenValue
 
 /**
@@ -49,4 +50,7 @@ open class BaseIjTestClass : BasePlatformTestCase() {
             expression, parent, isParentTypeFunction, PsiMethod::class.java,
             PsiNewExpression::class.java, PsiReferenceExpression::class.java, PsiMethodCallExpression::class.java
         )
+
+    fun getMethodCallArguments(methodName: String): List<String>? =
+        myFixture.file.getMethodCallArguments(methodName)
 }
