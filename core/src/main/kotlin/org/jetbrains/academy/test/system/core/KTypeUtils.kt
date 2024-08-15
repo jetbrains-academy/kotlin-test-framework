@@ -42,29 +42,14 @@ private fun KType.checkAbbreviation(abbreviation: String, errorMessagePrefix: St
     Assertions.assertEquals(
         this.getAbbreviation(),
         abbreviation,
-        "The return type for $errorMessagePrefix must contain $abbreviation"
+        "The return type for $errorMessagePrefix must be $abbreviation"
     )
 }
 
 private fun KType.getAbbreviation(): String {
-    val separator = " /*"
-    val strRepresentation = this.toString()
-    if (separator !in strRepresentation) {
-        if (arguments.isNotEmpty()) {
-            this.arguments.first().type?.toString()?.let {
-                return it
-            }
-        }
-        return if ("?" in strRepresentation) {
-            strRepresentation.dropLast(1)
-        } else {
-            strRepresentation
-        }
-    }
-    val abr = strRepresentation.split(separator).first()
-    return if ("<" in strRepresentation) {
-        "$abr>"
-    } else {
-        abr
-    }
+    val hintRegex = Regex(""" /\*[\w>.<, =_]+ \*/""")
+    return this
+        .toString()
+        .replace(hintRegex, "")
+        .filterNot { it == '?' }
 }
